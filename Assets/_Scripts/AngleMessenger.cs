@@ -2,6 +2,10 @@
 
 public class AngleMessenger : MonoBehaviour
 {
+    public PopUpMessege popUp;
+    public Transform[] moccaTransforms;
+    public MotionCoaching motionCoaching;
+    public REEL.PoseAnimation.RobotTransformController robot;
     [SerializeField]
     private CDJointOrientationSetter cdJointOrientationSetter;
 
@@ -19,11 +23,28 @@ public class AngleMessenger : MonoBehaviour
 
     private void Update()
     {
-        SendAngle();
+        if (StateUpdater.isCallingADV)
+        {
+            if (!CollisionManager.neckMove || !CollisionManager.leftArmMove || !CollisionManager.rightArmMove)
+            {
+                popUp.MessegePopUp("충돌이 일어나서 더 이상 움직일 수 없어요");
+                motionCoaching.StopMotion();
+                //for (int i = 0; i < joints.Length; i++)
+                //    cdJoints[i].RotateJoint(0);
+                StartCoroutine(robot.SetBasePos());
+            }
+                
+            else
+                SendAngle();
+        }
+        else
+            SendAngle();
+
     }
 
     void SendAngle()
     {
+        Debug.Log("각도 보내는 중");
         SendAngleToNeck();
         SendAngleToRightArm();
         SendAngleToLeftArm();

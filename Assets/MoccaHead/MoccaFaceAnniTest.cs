@@ -35,7 +35,7 @@ public class MoccaFaceAnniTest : MonoBehaviour
 
     }
 
-    private void Clear()
+    public void Clear()
     {
         normal = false;
         happy = false;
@@ -55,30 +55,30 @@ public class MoccaFaceAnniTest : MonoBehaviour
         gazeright = false;
     }
 
-    private void SetAnimation(string ani)
+    public void SetAnimation(string ani)
     {
         animator.CrossFade(ani, 0.0f);
-        Clear();
+        //Clear();
     }
 
 
     // Update is called once per frame
     void Update ()
     {
-        if (normal)     SetAnimation("normal");
-        if (happy)      SetAnimation("happy");
-        if (angry)      SetAnimation("angry");
-        if (fear)       SetAnimation("fear");
-        if (sad)        SetAnimation("sad");
-        if (smile)      SetAnimation("smile");
-        if (surprised)  SetAnimation("surprised");
-        if (speak)      SetAnimation("speak");
-        if (winkleft)   SetAnimation("winkleft");
-        if (winkright)  SetAnimation("winkright");
-        if (gazeup)     SetAnimation("gazeup");
-        if (gazedown)   SetAnimation("gazedown");
-        if (gazeleft)   SetAnimation("gazeleft");
-        if (gazeright)  SetAnimation("gazeright");
+        if (normal)     SetAnimation("normal");  //0
+        if (happy)      SetAnimation("happy");  //1
+        if (angry)      SetAnimation("angry");  //2
+        if (fear)       SetAnimation("fear");  //3
+        if (sad)        SetAnimation("sad");  //4
+        if (smile)      SetAnimation("smile");  //5 
+        if (surprised)  SetAnimation("surprised");  //6
+        if (speak)      SetAnimation("speak");  //7
+        if (winkleft)   SetAnimation("winkleft");  //8
+        if (winkright)  SetAnimation("winkright");  //9
+        if (gazeup)     SetAnimation("gazeup");  //10
+        if (gazedown)   SetAnimation("gazedown");  //11
+        if (gazeleft)   SetAnimation("gazeleft");  //12
+        if (gazeright)  SetAnimation("gazeright");  //13
 
     }
 

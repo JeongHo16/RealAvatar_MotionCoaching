@@ -8,9 +8,9 @@ public class CollisionManager : MonoBehaviour
     public GameObject[] rightArm; //오른팔 오브젝트 배열                       //InitParts, UpdatePartsCollision 함수는 조금 아쉽쓰.
     public GameObject[] leftArm; //왼팔 오브젝트 배열
 
-    private bool[] neckCollision; //오브젝트들의 충돌여부 boolean 배열
-    private bool[] rightArmCollision;
-    private bool[] leftArmCollision;
+    public bool[] neckCollision; //오브젝트들의 충돌여부 boolean 배열
+    public bool[] rightArmCollision;
+    public bool[] leftArmCollision;
 
     public static bool neckMove = true; // 목 동작 boolean
     public static bool rightArmMove = true; // 오른팔 동작 boolean
@@ -49,14 +49,13 @@ public class CollisionManager : MonoBehaviour
         for (int i = 0; i < neck.Length; i++)
         {
             neckCollision[i] = neck[i].GetComponent<MOCCAPart>().collision;
-            Debug.Log(neck[i].GetComponent<MOCCAPart>().collision);
+
         }
         for (int i = 0; i < rightArmCollision.Length; i++)
         {
             rightArmCollision[i] = rightArm[i].GetComponent<MOCCAPart>().collision;
             leftArmCollision[i] = leftArm[i].GetComponent<MOCCAPart>().collision;
-            Debug.Log(rightArm[i].GetComponent<MOCCAPart>().collision);
-            Debug.Log(leftArm[i].GetComponent<MOCCAPart>().collision);
+
         }
     }
 

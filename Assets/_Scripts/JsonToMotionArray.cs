@@ -43,7 +43,7 @@ public class JsonToMotionArray : MonoBehaviour
                 {
                     if (jx == motionData[ix].Length - 1)
                     {
-                        output += (-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)).ToString() + "]" + "\r\n" + "}," + "\r\n";
+                        output += (-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)*0.9).ToString() + "]" + "\r\n" + "}," + "\r\n";
                         continue;
                     }
 
@@ -53,7 +53,7 @@ public class JsonToMotionArray : MonoBehaviour
                 {
                     if (jx == motionData[ix].Length - 1)
                     {
-                        output += (-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)).ToString() + "]" + "\r\n" + "}" + "\r\n";
+                        output += (-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)*0.9).ToString() + "]" + "\r\n" + "}" + "\r\n";
                         continue;
                     }
                 }
@@ -63,7 +63,7 @@ public class JsonToMotionArray : MonoBehaviour
                 {
                     case 0:
                     case 1:
-                        output += (Mathf.Round((float)motionData[ix][jx] * 10) / 10).ToString() + ","+"\r\n";
+                        output += (Mathf.Round((float)motionData[ix][jx] * 10) / 10*0.9).ToString() + ","+"\r\n";
                         break;
                     
                     case 2:
@@ -73,7 +73,7 @@ public class JsonToMotionArray : MonoBehaviour
                     case 6:
                     case 7:
                     case 8:
-                        output += (((-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)))).ToString() + "," + "\r\n";
+                        output += (((-1*(Mathf.Round((float)motionData[ix][jx] * 10) / 10)*0.9))).ToString() + "," + "\r\n";
                         break;
 
                 }

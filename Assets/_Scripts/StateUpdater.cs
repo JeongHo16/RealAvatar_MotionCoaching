@@ -7,4 +7,5 @@
     public static bool isMotionPlayingRobot = false;
     public static bool isPopUpMessege = false;
     public static bool isCanInverse = true;
+    public static bool isCallingADV = false;
 }
