@@ -68,7 +68,7 @@ public class Kinematics : MonoBehaviour
             CalculateInverse(end_lx, end_ly, end_lz, false);
         else if (part == "오른팔")
             CalculateInverse(end_rx, end_ry, end_rz, true);
-        else if (part == "팔")
+        else if (part == "팔" || part == "양팔")
         {
             CalculateInverse(end_lx, end_ly, end_lz, false);
             CalculateInverse(end_rx, end_ry, end_rz, true);
@@ -89,13 +89,13 @@ public class Kinematics : MonoBehaviour
 
 
             if (direction == "상")
-                end_y += 0.2f;
+                end_y += 0.1f;
             else if (direction == "하")
-                end_y -= 0.2f;
+                end_y -= 0.1f;
             else if (direction == "좌")
-                end_x -= 0.2f;
+                end_x -= 0.1f;
             else
-                end_x += 0.2f;
+                end_x += 0.1f;
 
             float temp = end_x;
             end_x = end_y;

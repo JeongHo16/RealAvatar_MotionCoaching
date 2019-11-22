@@ -20,6 +20,7 @@ public class MotionCoaching : MonoBehaviour
 
     float[][] tempMotionData;
     string[] splitOutput;
+    bool canMove;
     public Coroutine coroutine;
 
     int facesave = 0;
@@ -43,8 +44,15 @@ public class MotionCoaching : MonoBehaviour
     {
 
         string keys = SpeechRecognition.output.result;
-        resultText.text = keys;
+        
         splitOutput = keys.Split(hyphen);
+        if(splitOutput[0]=="몸몸통바퀴")
+        {
+            popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+            resultText.text = null;
+        }
+        else resultText.text = keys;
+
 
         if (splitOutput[0] == "얼굴표정")
         {
@@ -86,10 +94,11 @@ public class MotionCoaching : MonoBehaviour
                 kinematics.ForwardKinematics();
                 kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
             }
-            if (!StateUpdater.isCanInverse)
+            if (!StateUpdater.isCanInverse || !canMove)
                 popUpMessege.MessegePopUp("더 이상 이동할 수 없어요");
 
         }
+
 
 
         if (splitOutput[0] == "ADV")
@@ -97,8 +106,7 @@ public class MotionCoaching : MonoBehaviour
             SpeechRecognition.receive = false;
             StateUpdater.isCallingADV = true;
             switchFaceAni(facesave);
-            //tempMotionData = motionDataFile;
-            Debug.Log(tempMotionData.Length+"    "+motionDataFile.Length);
+            tempMotionData = motionDataFile;
             if (splitOutput[1] == "속도강")
                 MotionSpeedUp();
             else if (splitOutput[1] == "속도약")
@@ -361,16 +369,51 @@ public class MotionCoaching : MonoBehaviour
     {
         float angle_y = cdJoints[6].GetCurrentAngle;
         float angle_x = cdJoints[7].GetCurrentAngle;
+        float angle = 0;
+        int index = 0;
         if (splitOutput[1] == "상")
-            StartCoroutine(cdJoints[7].SetQuatLerp(angle_x - 20f, 0.2f));
+        {
+            index = 7;
+            angle = angle_x - 20f;
+        }
         else if (splitOutput[1] == "하")
-            StartCoroutine(cdJoints[7].SetQuatLerp(angle_x + 20f, 0.2f));
+        {
+            index = 7;
+            angle = angle_x + 20f;
+        }
         else if (splitOutput[1] == "좌")
-            StartCoroutine(cdJoints[7].SetQuatLerp(angle_y - 20f, 0.2f));
+        {
+            index = 6;
+            angle = angle_y - 20f;
+        }
         else if (splitOutput[1] == "우")
-            StartCoroutine(cdJoints[7].SetQuatLerp(angle_y + 20f, 0.2f));
+        {
+            index = 6;
+            angle = angle_y + 20f;
+        }
 
+        CheckNeckAngle(angle, index);
+
+        if (canMove)
+            StartCoroutine(cdJoints[index].SetQuatLerp(angle, 0.3f));
     }
+
+    void CheckNeckAngle(float angle, int index)
+    {
+        switch (index)
+        {
+            case 6:
+                if (angle > 50 || angle < -50)
+                    canMove = false;
+                break;
+            case 7:
+                if (angle > 25 || angle < -60)
+                    canMove = false;
+                break;
+        }
+        canMove = true;
+    }
+
 }
 
-  
+
