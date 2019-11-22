@@ -8,7 +8,10 @@ public class MotionCoaching : MonoBehaviour
     public REEL.PoseAnimation.RobotTransformController robot;
     public MoccaFaceAnniTest face;
     public Kinematics kinematics;
+
     public PopUpMessege popUpMessege;
+    public Text resultText;
+
     public static float[][] motionDataFile;
 
     [SerializeField]
@@ -18,35 +21,29 @@ public class MotionCoaching : MonoBehaviour
     float[][] tempMotionData;
     string[] splitOutput;
     public Coroutine coroutine;
+
     int facesave = 0;
 
     char hyphen = '-';
-
     string[] motionOnly = { "머리고개얼굴목", "오른팔", "왼팔", "팔양팔두팔양쪽팔" };
 
-    float faceTimer = 0f;
 
-    // Start is called before the first frame update
     private void Awake()
     {
         cdJoints = cdJointOrientationSetter.joints;
     }
 
-    // Update is called once per frame
     private void Update()
     {
 
         if (SpeechRecognition.receive == true)
             playResultGesture();
-
-        
-
-
     }
     public void playResultGesture()
     {
 
         string keys = SpeechRecognition.output.result;
+        resultText.text = keys;
         splitOutput = keys.Split(hyphen);
 
         if (splitOutput[0] == "얼굴표정")
