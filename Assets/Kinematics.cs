@@ -68,19 +68,12 @@ public class Kinematics : MonoBehaviour
             CalculateInverse(end_lx, end_ly, end_lz, false);
         else if (part == "오른팔")
             CalculateInverse(end_rx, end_ry, end_rz, true);
-        else
+        else if (part == "팔")
         {
             CalculateInverse(end_lx, end_ly, end_lz, false);
             CalculateInverse(end_rx, end_ry, end_rz, true);
         }
-
-        //float[][] sendAngles = new float[1][];
-        //sendAngles[0][0] = 0.2f;
-        //for (int i =0; i< afterAngles.Length; i++)
-        //{
-        //    sendAngles[0][i+1] = afterAngles[i];
-        //}
-        //return sendAngles;
+        
     }
 
     public void CalculateInverse(float end_x, float end_y, float end_z, bool right)

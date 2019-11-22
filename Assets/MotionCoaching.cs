@@ -8,9 +8,13 @@ public class MotionCoaching : MonoBehaviour
     public REEL.PoseAnimation.RobotTransformController robot;
     public MoccaFaceAnniTest face;
     public Kinematics kinematics;
-    public Text text;
     public PopUpMessege popUpMessege;
     public static float[][] motionDataFile;
+
+    [SerializeField]
+    public CDJointOrientationSetter cdJointOrientationSetter;
+    private CDJoint[] cdJoints;
+
     float[][] tempMotionData;
     string[] splitOutput;
     public Coroutine coroutine;
@@ -23,7 +27,10 @@ public class MotionCoaching : MonoBehaviour
     float faceTimer = 0f;
 
     // Start is called before the first frame update
-
+    private void Awake()
+    {
+        cdJoints = cdJointOrientationSetter.joints;
+    }
 
     // Update is called once per frame
     private void Update()
@@ -73,19 +80,27 @@ public class MotionCoaching : MonoBehaviour
         if (splitOutput[0] == "DYN")
         {
             SpeechRecognition.receive = false;
-            kinematics.ForwardKinematics();
-            kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
+            if (splitOutput[2] == "고개")
+            {
+                MovingNeck();
+            }
+            else
+            {
+                kinematics.ForwardKinematics();
+                kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
+            }
             if (!StateUpdater.isCanInverse)
                 popUpMessege.MessegePopUp("더 이상 이동할 수 없어요");
 
         }
+
 
         if (splitOutput[0] == "ADV")
         {
             SpeechRecognition.receive = false;
             StateUpdater.isCallingADV = true;
             switchFaceAni(facesave);
-            tempMotionData = motionDataFile;
+            //tempMotionData = motionDataFile;
             Debug.Log(tempMotionData.Length+"    "+motionDataFile.Length);
             if (splitOutput[1] == "속도강")
                 MotionSpeedUp();
@@ -104,8 +119,10 @@ public class MotionCoaching : MonoBehaviour
         }
     }
 
+
     public void faceAni()
     {
+        face.Clear();
         if (splitOutput[1] == "무표정")
             facesave = 0;
         else if (splitOutput[1] == "기쁨")
@@ -181,7 +198,7 @@ public class MotionCoaching : MonoBehaviour
             facesave = 2;
         else if (splitOutput[1] == "회피")
             facesave = 12;
-        else if (splitOutput[1] == "포옹")
+        else if (splitOutput[1] == "허그")
             facesave = 1;
         else if (splitOutput[1] == "만세")
             facesave = 5;
@@ -341,6 +358,21 @@ public class MotionCoaching : MonoBehaviour
                 face.gazeright = true;
                 break;
         }
+    }
+
+    void MovingNeck()
+    {
+        float angle_y = cdJoints[6].GetCurrentAngle;
+        float angle_x = cdJoints[7].GetCurrentAngle;
+        if (splitOutput[1] == "상")
+            StartCoroutine(cdJoints[7].SetQuatLerp(angle_x - 20f, 0.2f));
+        else if (splitOutput[1] == "하")
+            StartCoroutine(cdJoints[7].SetQuatLerp(angle_x + 20f, 0.2f));
+        else if (splitOutput[1] == "좌")
+            StartCoroutine(cdJoints[7].SetQuatLerp(angle_y - 20f, 0.2f));
+        else if (splitOutput[1] == "우")
+            StartCoroutine(cdJoints[7].SetQuatLerp(angle_y + 20f, 0.2f));
+
     }
 }
 
