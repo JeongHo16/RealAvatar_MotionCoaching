@@ -65,7 +65,8 @@ namespace REEL.PoseAnimation
 			new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, -10    },
             new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, 20     },
             new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0,  -10   },
-            
+            new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, 20     },
+
         };
         float[][] noList = {
                 			// Time,    Left Arm,           Right Arm,          Head
@@ -846,7 +847,7 @@ namespace REEL.PoseAnimation
             motionTable.Add("thinking", thinkingList);
             motionTable.Add("전신-(규모 등에)놀람", excellentList);  // 박수.
             motionTable.Add("stretch", stretchList);
-            motionTable.Add("전신-포옹", hugList);
+            motionTable.Add("전신-허그", hugList);
             //motionTable.Add("fear", fearList);  // 새로 만들기.
             motionTable.Add("bow", bowList);
             motionTable.Add("attention", attentionList);
@@ -921,6 +922,7 @@ namespace REEL.PoseAnimation
             motionTable.Add("전신-혐오싫음", movement_disgustList);
             motionTable.Add("전신-화남", movement_angryList);
             motionTable.Add("전신-생각", thinkingList);
+            motionTable.Add("전신-기본자세", breathing_active);
         }
 
         float GetDurationToFirstAngle(float[] motionInfo)
