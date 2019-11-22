@@ -86,7 +86,6 @@ public class Kinematics : MonoBehaviour
     public void CalculateInverse(float end_x, float end_y, float end_z, bool right)
     {
         LimitStretchPose();
-        Debug.Log("1");
         if (StateUpdater.isCanInverse)
         {
             int sign;
@@ -176,7 +175,6 @@ public class Kinematics : MonoBehaviour
 
                 
                 LimitStretchPose();
-                Debug.Log("2");
 
                 if (StateUpdater.isCanInverse)
                 {
@@ -267,7 +265,6 @@ public class Kinematics : MonoBehaviour
                 val0 = afterAngles[3];
                 val1 = afterAngles[4];
                 val2 = afterAngles[5];
-                Debug.Log(val0+"  "+val1+"  "+val2);
  
 
             }

@@ -44,7 +44,6 @@ public class AngleMessenger : MonoBehaviour
 
     void SendAngle()
     {
-        Debug.Log("각도 보내는 중");
         SendAngleToNeck();
         SendAngleToRightArm();
         SendAngleToLeftArm();

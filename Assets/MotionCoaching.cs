@@ -10,7 +10,6 @@ public class MotionCoaching : MonoBehaviour
     public Kinematics kinematics;
     public Text text;
     public PopUpMessege popUpMessege;
-    public InputField inputField;
     public static float[][] motionDataFile;
     float[][] tempMotionData;
     string[] splitOutput;
@@ -24,10 +23,7 @@ public class MotionCoaching : MonoBehaviour
     float faceTimer = 0f;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        inputField.text = null;
-    }
+
 
     // Update is called once per frame
     private void Update()
@@ -197,6 +193,7 @@ public class MotionCoaching : MonoBehaviour
             facesave = 0;
             switchFaceAni(facesave);
             StopCoroutine(coroutine);
+            face.Clear();
         }
 
         else
@@ -294,6 +291,7 @@ public class MotionCoaching : MonoBehaviour
     public void StopMotion()
     {
         StopCoroutine(coroutine);
+        face.Clear();
     }
 
     public void switchFaceAni(int i)
