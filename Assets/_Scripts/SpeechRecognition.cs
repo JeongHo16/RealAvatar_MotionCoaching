@@ -7,7 +7,6 @@ using FrostweepGames.Plugins.GoogleCloud.SpeechRecognition;
 
 public class SpeechRecognition : Singleton<SpeechRecognition>
 {
-
     private GCSpeechRecognition _speechRecognition;
     public Sprite[] micImages;
     public Image mic;
@@ -124,6 +123,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
     private void SpeechRecognizedFailedEventHandler(string obj, long requestIndex)
     {
         Debug.Log("SpeechRecognizedFailedEventHandler: " + obj);
+        StateUpdater.isSpeakingAgain = true;
     }
 
     private void RecognitionSuccessEventHandler(RecognitionResponse obj, long requestIndex)

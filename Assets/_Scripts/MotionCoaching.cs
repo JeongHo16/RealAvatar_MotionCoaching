@@ -20,7 +20,7 @@ public class MotionCoaching : MonoBehaviour
 
     float[][] tempMotionData;
     string[] splitOutput;
-    bool canMove;
+    bool canMove = true;
     public Coroutine coroutine;
 
     int facesave = 0;
@@ -36,9 +36,13 @@ public class MotionCoaching : MonoBehaviour
 
     private void Update()
     {
-
         if (SpeechRecognition.receive == true)
             playResultGesture();
+        if(StateUpdater.isSpeakingAgain)
+        {
+            popUpMessege.MessegePopUp("다시 한번 말해주세요");
+            StateUpdater.isSpeakingAgain = false;
+        }
     }
     public void playResultGesture()
     {
