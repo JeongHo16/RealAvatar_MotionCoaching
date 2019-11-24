@@ -38,19 +38,27 @@ public class MotionCoaching : MonoBehaviour
     {
         if (SpeechRecognition.receive == true)
             playResultGesture();
-        if(StateUpdater.isSpeakingAgain)
+        if (StateUpdater.isSpeakingAgain)
         {
             popUpMessege.MessegePopUp("다시 한번 말해주세요");
             StateUpdater.isSpeakingAgain = false;
         }
+        if (!StateUpdater.isCanInverse || !canMove)
+        {
+            popUpMessege.MessegePopUp("더 이상 이동할 수 없어요");
+            StateUpdater.isCanInverse = true;
+            canMove = true;
+        }
+            
+        Debug.Log(canMove);
     }
     public void playResultGesture()
     {
 
         string keys = SpeechRecognition.output.result;
-        
+
         splitOutput = keys.Split(hyphen);
-        if(splitOutput[0]=="몸몸통바퀴")
+        if (splitOutput[0] == "몸몸통바퀴")
         {
             popUpMessege.MessegePopUp("일치하는 동작이 없어요");
             resultText.text = null;
@@ -69,7 +77,7 @@ public class MotionCoaching : MonoBehaviour
             if (splitOutput[0] == motionOnly[i])
             {
                 facesave = 0;
-                
+
                 motionDataFile = robot.keyMotionTable(keys);
 
                 if (motionDataFile != null)
@@ -89,7 +97,7 @@ public class MotionCoaching : MonoBehaviour
         if (splitOutput[0] == "DYN")
         {
             SpeechRecognition.receive = false;
-            if (splitOutput[2] == "머리" || splitOutput[2] == "고개")
+            if (splitOutput[2] == "고개" || splitOutput[2] == "왼쪽" || splitOutput[2] == "오른쪽" || splitOutput[2] == "머리")
             {
                 MovingNeck();
             }
@@ -98,8 +106,7 @@ public class MotionCoaching : MonoBehaviour
                 kinematics.ForwardKinematics();
                 kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
             }
-            if (!StateUpdater.isCanInverse || !canMove)
-                popUpMessege.MessegePopUp("더 이상 이동할 수 없어요");
+
 
         }
 
@@ -119,7 +126,7 @@ public class MotionCoaching : MonoBehaviour
                 MotionExpansion();
             else if (splitOutput[1] == "각도약")
                 MotionReduction();
-            
+
         }
 
         if (keys == "NOT_MATCHED")
@@ -168,7 +175,7 @@ public class MotionCoaching : MonoBehaviour
 
     void wholeBody(string key)
     {
-        
+
         if (splitOutput[1] == "(규모 등에)놀람")
             facesave = 6;
         else if (splitOutput[1] == "(소리 등에)놀람")
@@ -230,7 +237,7 @@ public class MotionCoaching : MonoBehaviour
         }
 
 
-        
+
     }
 
     void MotionSpeedUp()
@@ -239,7 +246,7 @@ public class MotionCoaching : MonoBehaviour
         {
             tempMotionData[i][0] = motionDataFile[i][0] * 0.3f;
         }
-            
+
         StartCoroutine(robot.GestureProcess(tempMotionData));
 
     }
@@ -250,13 +257,13 @@ public class MotionCoaching : MonoBehaviour
         {
             tempMotionData[i][0] = motionDataFile[i][0] * 2.5f;
         }
-            
+
         StartCoroutine(robot.GestureProcess(tempMotionData));
     }
 
     void MotionExpansion()
     {
-    
+
         for (int i = 0; i < motionDataFile.Length; i++)
         {
             for (int j = 1; j < motionDataFile[i].Length; j++)
@@ -264,7 +271,7 @@ public class MotionCoaching : MonoBehaviour
                 tempMotionData[i][j] = motionDataFile[i][j] * 1.3f;
                 limitMinMax(i, j);
             }
-                
+
         }
         coroutine = StartCoroutine(robot.GestureProcess(tempMotionData));
     }
@@ -284,35 +291,35 @@ public class MotionCoaching : MonoBehaviour
         }
         coroutine = StartCoroutine(robot.GestureProcess(tempMotionData));
     }
-        void limitMinMax(int i, int j)
+    void limitMinMax(int i, int j)
+    {
+        switch (j)
         {
-            switch (j)
-            {
-                case 0:
-                case 3:
-                    Mathf.Clamp(tempMotionData[i][j], -90.0f, 90.0f);
-                    break;
-                case 1:
-                    Mathf.Clamp(tempMotionData[i][j], -20.0f, 90.0f);
-                    break;
-                case 2:
-                    Mathf.Clamp(tempMotionData[i][j], 0f, 90.0f);
-                    break;
-                case 4:
-                    Mathf.Clamp(tempMotionData[i][j], -90.0f, 20.0f);
-                    break;
-                case 5:
-                    Mathf.Clamp(tempMotionData[i][j], -90.0f, 0f);
-                    break;
-                case 6:
-                    Mathf.Clamp(tempMotionData[i][j], -40.0f, 40.0f);
-                    break;
-                case 7:
-                    Mathf.Clamp(tempMotionData[i][j], -30.0f, 15.0f);
-                    break;
-            }
+            case 0:
+            case 3:
+                Mathf.Clamp(tempMotionData[i][j], -90.0f, 90.0f);
+                break;
+            case 1:
+                Mathf.Clamp(tempMotionData[i][j], -20.0f, 90.0f);
+                break;
+            case 2:
+                Mathf.Clamp(tempMotionData[i][j], 0f, 90.0f);
+                break;
+            case 4:
+                Mathf.Clamp(tempMotionData[i][j], -90.0f, 20.0f);
+                break;
+            case 5:
+                Mathf.Clamp(tempMotionData[i][j], -90.0f, 0f);
+                break;
+            case 6:
+                Mathf.Clamp(tempMotionData[i][j], -40.0f, 40.0f);
+                break;
+            case 7:
+                Mathf.Clamp(tempMotionData[i][j], -30.0f, 15.0f);
+                break;
         }
- 
+    }
+
 
     public void StopMotion()
     {
@@ -396,6 +403,8 @@ public class MotionCoaching : MonoBehaviour
             angle = angle_y + 20f;
         }
 
+        if (angle >= 180)
+            angle -= 360;
         CheckNeckAngle(angle, index);
 
         if (canMove)
@@ -411,11 +420,10 @@ public class MotionCoaching : MonoBehaviour
                     canMove = false;
                 break;
             case 7:
-                if (angle > 25 || angle < -60)
+                if (angle > 30 || angle < -60)
                     canMove = false;
                 break;
         }
-        canMove = true;
     }
 
 }
