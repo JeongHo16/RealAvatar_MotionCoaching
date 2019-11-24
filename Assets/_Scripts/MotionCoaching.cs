@@ -89,7 +89,7 @@ public class MotionCoaching : MonoBehaviour
         if (splitOutput[0] == "DYN")
         {
             SpeechRecognition.receive = false;
-            if (splitOutput[2] == "고개")
+            if (splitOutput[2] == "머리")
             {
                 MovingNeck();
             }
