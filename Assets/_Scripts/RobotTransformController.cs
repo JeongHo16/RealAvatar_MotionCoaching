@@ -249,7 +249,7 @@ namespace REEL.PoseAnimation
         };
         float[][] headDownList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.8f,       45, -45, -45,       -45, 45, 45,        0, -10 },
+            new float[9] {  0.8f,       45, -45, -45,       -45, 45, 45,        0, -7 },
             
         };
         float[][] headList = new float[2][] {

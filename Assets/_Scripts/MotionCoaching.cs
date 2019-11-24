@@ -390,7 +390,7 @@ public class MotionCoaching : MonoBehaviour
         else if (splitOutput[1] == "하")
         {
             index = 7;
-            angle = angle_x + 20f;
+            angle = angle_x + 5f;
         }
         else if (splitOutput[1] == "좌")
         {
