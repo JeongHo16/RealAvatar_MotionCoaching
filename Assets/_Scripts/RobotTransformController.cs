@@ -817,6 +817,7 @@ namespace REEL.PoseAnimation
 
         public float[][] keyMotionTable(string keys)
         {
+            InitMotionTable();
             return motionTable[keys];
         }
         void InitMotionTable()
