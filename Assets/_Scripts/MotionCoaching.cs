@@ -10,7 +10,7 @@ public class MotionCoaching : MonoBehaviour
     public Kinematics kinematics;
 
     public PopUpMessege popUpMessege;
-    public Text resultText;
+    //public Text resultText;
 
     public static float[][] motionDataFile;
 
@@ -49,8 +49,6 @@ public class MotionCoaching : MonoBehaviour
             StateUpdater.isCanInverse = true;
             canMove = true;
         }
-            
-        Debug.Log(canMove);
     }
     public void playResultGesture()
     {
@@ -61,9 +59,9 @@ public class MotionCoaching : MonoBehaviour
         if (splitOutput[0] == "몸몸통바퀴")
         {
             popUpMessege.MessegePopUp("일치하는 동작이 없어요");
-            resultText.text = null;
+            //resultText.text = null;
         }
-        else resultText.text = keys;
+        //else resultText.text = keys;
 
 
         if (splitOutput[0] == "얼굴표정")
@@ -420,7 +418,7 @@ public class MotionCoaching : MonoBehaviour
                     canMove = false;
                 break;
             case 7:
-                if (angle > 30 || angle < -60)
+                if (angle > 13 || angle < -60)
                     canMove = false;
                 break;
         }
