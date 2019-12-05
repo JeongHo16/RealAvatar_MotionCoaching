@@ -9,4 +9,5 @@
     public static bool isCanInverse = true;
     public static bool isCallingADV = false;
     public static bool isSpeakingAgain = false;
+    public static bool isInputEntered = false;
 }

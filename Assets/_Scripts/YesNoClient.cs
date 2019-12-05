@@ -59,6 +59,7 @@ public class YesNoClient : Singleton<YesNoClient>
     {
         if (!socketReady)
             return;
+    
         String tmpString = theLine + "\r\n";
         streamWriter.Write(tmpString);
         streamWriter.Flush();

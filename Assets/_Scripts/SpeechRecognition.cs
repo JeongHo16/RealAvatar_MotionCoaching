@@ -10,6 +10,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
     private GCSpeechRecognition _speechRecognition;
     public Sprite[] micImages;
     public Image mic;
+    public InputField inputField;
     public static bool receive = false;
     public static AI_MESSAGE output;
 
@@ -111,6 +112,27 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
             }
             
         }
+
+        if (StateUpdater.isInputEntered)
+        {
+            
+            YesNoClient.Instance.Open();
+            AI_MESSAGE request = new AI_MESSAGE();
+            request.method = "movements";
+            request.input = inputField.text;
+            string jsonString = JsonUtility.ToJson(request, prettyPrint: false);
+            Debug.Log("[Coaching]" + jsonString);
+            YesNoClient.Instance.Write(jsonString);
+
+            inputField.text = "";
+
+            StateUpdater.isInputEntered = false;
+        }
+    }
+
+    public void InputFiledEnteredButton()
+    {
+        StateUpdater.isInputEntered = true;
     }
 
     private void OnDestroy()
