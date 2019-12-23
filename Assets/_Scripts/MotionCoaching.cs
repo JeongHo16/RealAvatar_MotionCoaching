@@ -75,8 +75,8 @@ public class MotionCoaching : MonoBehaviour
             if (splitOutput[0] == motionOnly[i])
             {
                 facesave = 0;
-
-                motionDataFile = robot.keyMotionTable(keys);
+                motionDataFile= CopyFloatArray(keys);
+                //motionDataFile = robot.keyMotionTable(keys);
 
                 if (motionDataFile != null)
                 {
@@ -131,8 +131,25 @@ public class MotionCoaching : MonoBehaviour
         {
             popUpMessege.MessegePopUp("일치하는 동작이 없어요");
         }
+
+
     }
 
+    float[][] CopyFloatArray(string key)
+    {
+        float[][] value = robot.keyMotionTable(key);
+        float[][] newArray = new float[value.Length][];
+        for(int i = 0; i < value.Length; i++)
+        {
+            float[] val = new float[value[i].Length];
+            for(int j = 0; j < value[i].Length; j++)
+            {
+                val[j] = value[i][j];
+            }
+            newArray[i] = val;
+        }
+        return newArray;
+    }
 
     public void faceAni()
     {
@@ -230,7 +247,8 @@ public class MotionCoaching : MonoBehaviour
         else
         {
             switchFaceAni(facesave);
-            motionDataFile = robot.keyMotionTable(key);
+            //motionDataFile = robot.keyMotionTable(key);
+            motionDataFile=CopyFloatArray(key);
             coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
         }
 
@@ -240,9 +258,9 @@ public class MotionCoaching : MonoBehaviour
 
     void MotionSpeedUp()
     {
-        for (int i = 0; i < motionDataFile.Length; i++)
+        for (int i = 0; i < tempMotionData.Length; i++)
         {
-            tempMotionData[i][0] = motionDataFile[i][0] * 0.3f;
+            tempMotionData[i][0] = tempMotionData[i][0] * 0.3f;
         }
 
         StartCoroutine(robot.GestureProcess(tempMotionData));
@@ -251,9 +269,9 @@ public class MotionCoaching : MonoBehaviour
 
     void MotionSpeedDown()
     {
-        for (int i = 0; i < motionDataFile.Length; i++)
+        for (int i = 0; i < tempMotionData.Length; i++)
         {
-            tempMotionData[i][0] = motionDataFile[i][0] * 2.5f;
+            tempMotionData[i][0] = tempMotionData[i][0] * 2.5f;
         }
 
         StartCoroutine(robot.GestureProcess(tempMotionData));
@@ -262,11 +280,11 @@ public class MotionCoaching : MonoBehaviour
     void MotionExpansion()
     {
 
-        for (int i = 0; i < motionDataFile.Length; i++)
+        for (int i = 0; i < tempMotionData.Length; i++)
         {
-            for (int j = 1; j < motionDataFile[i].Length; j++)
+            for (int j = 1; j < tempMotionData[i].Length; j++)
             {
-                tempMotionData[i][j] = motionDataFile[i][j] * 1.3f;
+                tempMotionData[i][j] = tempMotionData[i][j] * 1.3f;
                 limitMinMax(i, j);
             }
 
@@ -277,11 +295,11 @@ public class MotionCoaching : MonoBehaviour
     void MotionReduction()
     {
 
-        for (int i = 0; i < motionDataFile.Length; i++)
+        for (int i = 0; i < tempMotionData.Length; i++)
         {
-            for (int j = 1; j < motionDataFile[i].Length; j++)
+            for (int j = 1; j < tempMotionData[i].Length; j++)
             {
-                tempMotionData[i][j] = motionDataFile[i][j] * 0.7f;
+                tempMotionData[i][j] = tempMotionData[i][j] * 0.7f;
                 limitMinMax(i, j);
 
             }
