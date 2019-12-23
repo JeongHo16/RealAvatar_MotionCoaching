@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: Assets/_Scenes/Real_Avatar_back.unity
+    guid: 6870787d66e25254d9011692ff8b7ece
   - enabled: 1
     path: Assets/_Scenes/Real_Avatar.unity
-    guid: 6870787d66e25254d9011692ff8b7ece
+    guid: 4270c8434d555294e929b2e011f33125
   m_configObjects: {}
