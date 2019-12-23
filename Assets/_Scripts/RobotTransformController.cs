@@ -394,10 +394,10 @@ namespace REEL.PoseAnimation
         };
         float[][] armsSwingLeftList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  1.0f,       0, -88.2f, -27.9f,         40.5f, -40.5f, -40.5f,          0, 9},
-            new float[9] {  1.0f,       0, -46.8f, -14.4f,         40.5f, -40.5f, -40.5f,         0, 9},
-            new float[9] {  1.0f,       0, -88.2f, -27.9f,         40.5f, -40.5f, -40.5f,          0, 9},
-            new float[9] {  1.0f,        0, -46.8f, -14.4f,         40.5f, -40.5f, -40.5f,        0, 9},
+            new float[9] {  1.0f,       0, -88.2f, -27.9f,         -40.5f, 40.5f, 40.5f,          0, 9},
+            new float[9] {  1.0f,       0, -46.8f, -14.4f,         -40.5f, 40.5f, 40.5f,         0, 9},
+            new float[9] {  1.0f,       0, -88.2f, -27.9f,         -40.5f, 40.5f, 40.5f,          0, 9},
+            new float[9] {  1.0f,        0, -46.8f, -14.4f,        -40.5f, 40.5f, 40.5f,        0, 9},
 
         };
         float[][] armsRightList = {
