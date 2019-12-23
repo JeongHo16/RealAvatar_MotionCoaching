@@ -11,7 +11,7 @@ public class PopUpMessege : MonoBehaviour
 
     void Start()
     {
-        MessegePopUp("안녕하세요");
+        MessegePopUp("안녕하세요.\n저는 모카입니다.");
     }
 
     public void MessegePopUp(string message)
