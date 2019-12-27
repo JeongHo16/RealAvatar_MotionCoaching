@@ -10,7 +10,7 @@ public class MotionCoaching : MonoBehaviour
     public Kinematics kinematics;
 
     public PopUpMessege popUpMessege;
-    //public Text resultText;
+    public Text resultText;
 
     public static float[][] motionDataFile;
 
@@ -20,12 +20,20 @@ public class MotionCoaching : MonoBehaviour
 
     float[][] tempMotionData;
     string[] splitOutput;
+
+    string[] firstSplit;
+    string[] secondSplit;
+    string[] thirdSplit;
+
+    private int highSpeedLimit = 0;
+
     bool canMove = true;
     public Coroutine coroutine;
 
     int facesave = 0;
 
     char hyphen = '-';
+    char slash = '/';
     string[] motionOnly = { "머리고개얼굴목", "오른팔", "왼팔", "팔양팔두팔양쪽팔" };
 
 
@@ -52,87 +60,86 @@ public class MotionCoaching : MonoBehaviour
     }
     public void playResultGesture()
     {
-
+        face.Clear();
         string keys = SpeechRecognition.output.result;
+        resultText.text = keys;
 
-        splitOutput = keys.Split(hyphen);
-        if (splitOutput[0] == "몸몸통바퀴")
-        {
-            popUpMessege.MessegePopUp("일치하는 동작이 없어요");
-            //resultText.text = null;
-        }
-        //else resultText.text = keys;
-
-
-        if (splitOutput[0] == "얼굴표정")
-        {
-            faceAni();
-            SpeechRecognition.receive = false;
-        }
-
-        for (int i = 0; i < motionOnly.Length; i++)
-        {
-            if (splitOutput[0] == motionOnly[i])
-            {
-                facesave = 0;
-                motionDataFile= CopyFloatArray(keys);
-                //motionDataFile = robot.keyMotionTable(keys);
-
-                if (motionDataFile != null)
-                {
-                    StartCoroutine(robot.GestureProcess(motionDataFile));
-                    SpeechRecognition.receive = false;
-                }
-            }
-        }
-
-        if (splitOutput[0] == "전신")
-        {
-            wholeBody(keys);
-            SpeechRecognition.receive = false;
-        }
-
-        if (splitOutput[0] == "DYN")
-        {
-            SpeechRecognition.receive = false;
-            if (splitOutput[2] == "고개" || splitOutput[2] == "왼쪽" || splitOutput[2] == "오른쪽" || splitOutput[2] == "머리")
-            {
-                MovingNeck();
-            }
-            else
-            {
-                kinematics.ForwardKinematics();
-                kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
-            }
-
-
-        }
-
-
-
-        if (splitOutput[0] == "ADV")
-        {
-            SpeechRecognition.receive = false;
-            StateUpdater.isCallingADV = true;
-            switchFaceAni(facesave);
-            tempMotionData = motionDataFile;
-            if (splitOutput[1] == "속도강")
-                MotionSpeedUp();
-            else if (splitOutput[1] == "속도약")
-                MotionSpeedDown();
-            else if (splitOutput[1] == "각도강")
-                MotionExpansion();
-            else if (splitOutput[1] == "각도약")
-                MotionReduction();
-
-        }
-
-        if (keys == "NOT_MATCHED")
+        if (keys == "NOT_FOUND")
         {
             popUpMessege.MessegePopUp("일치하는 동작이 없어요");
         }
 
+        else
+        {
+            splitOutput = keys.Split(hyphen);
+            switch (splitOutput[0])
+            {
+                case "몸몸통바퀴":
+                    popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+                    break;
 
+                case "얼굴표정":
+                    faceAni();
+
+                    break;
+
+                case "전신":
+                    wholeBody(keys);
+                    break;
+
+                case "DYN":
+                    if (splitOutput[2] == "고개" || splitOutput[2] == "왼쪽" || splitOutput[2] == "오른쪽" || splitOutput[2] == "머리")
+                    {
+                        MovingNeck();
+                    }
+                    else
+                    {
+                        kinematics.ForwardKinematics();
+                        kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
+                    }
+                    break;
+
+                case "ADV":
+                    StateUpdater.isCallingADV = true;
+                    switchFaceAni(facesave);
+                    if (splitOutput[1] == "속도강")
+                    {
+                        if (++highSpeedLimit == 1)
+                            MotionSpeedUp();
+                        else
+                        {
+                            StartCoroutine(robot.GestureProcess(motionDataFile));
+                            popUpMessege.MessegePopUp("더 빠르게 할 수 없어요");
+                        }
+
+                    }
+                    else if (splitOutput[1] == "속도약")
+                        MotionSpeedDown();
+                    else if (splitOutput[1] == "각도강")
+                        MotionExpansion();
+                    else if (splitOutput[1] == "각도약")
+                        MotionReduction();
+                    break;
+
+                default:
+                    for (int i = 0; i < motionOnly.Length; i++)
+                    {
+                        if (splitOutput[0] == motionOnly[i])
+                        {
+                            facesave = 0;
+                            motionDataFile = CopyFloatArray(keys);
+
+                            if (motionDataFile != null)
+                            {
+                                StartCoroutine(robot.GestureProcess(motionDataFile));
+                                break;
+                            }
+                        }
+                    }
+                    break;
+            }
+            SpeechRecognition.receive = false;
+        }
     }
 
     float[][] CopyFloatArray(string key)
@@ -153,7 +160,6 @@ public class MotionCoaching : MonoBehaviour
 
     public void faceAni()
     {
-        face.Clear();
         if (splitOutput[1] == "무표정")
             facesave = 0;
         else if (splitOutput[1] == "기쁨")
@@ -190,13 +196,12 @@ public class MotionCoaching : MonoBehaviour
 
     void wholeBody(string key)
     {
-
         if (splitOutput[1] == "(규모 등에)놀람")
             facesave = 6;
         else if (splitOutput[1] == "(소리 등에)놀람")
             facesave = 6;
         else if (splitOutput[1] == "고개숙여인사")
-            facesave = 1;
+            facesave = 5;
         else if (splitOutput[1] == "긍정")
             facesave = 5;
         else if (splitOutput[1] == "부정")
@@ -230,7 +235,7 @@ public class MotionCoaching : MonoBehaviour
         else if (splitOutput[1] == "회피")
             facesave = 12;
         else if (splitOutput[1] == "허그")
-            facesave = 1;
+            facesave = 5;
         else if (splitOutput[1] == "만세")
             facesave = 5;
         else if (splitOutput[1] == "생각")
@@ -251,9 +256,7 @@ public class MotionCoaching : MonoBehaviour
             motionDataFile=CopyFloatArray(key);
             coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
         }
-
-
-
+        
     }
 
     void MotionSpeedUp()
@@ -442,5 +445,9 @@ public class MotionCoaching : MonoBehaviour
         }
     }
 
+    
+
 }
+
+
 
