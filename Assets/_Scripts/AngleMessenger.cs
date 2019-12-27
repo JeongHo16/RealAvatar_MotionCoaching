@@ -23,19 +23,29 @@ public class AngleMessenger : MonoBehaviour
 
     private void Update()
     {
-        if (StateUpdater.isCallingADV)
-        {
-            if (!CollisionManager.neckMove || !CollisionManager.leftArmMove || !CollisionManager.rightArmMove)
-            {
-                popUp.MessegePopUp("충돌이 일어나서 더 이상 움직일 수 없어요");
-                motionCoaching.StopMotion();
-                //for (int i = 0; i < joints.Length; i++)
-                //    cdJoints[i].RotateJoint(0);
-                StartCoroutine(robot.SetBasePos());
-            }
+        //if (StateUpdater.isCallingADV)
+        //{
+        //    if (!CollisionManager.neckMove || !CollisionManager.leftArmMove || !CollisionManager.rightArmMove)
+        //    {
+        //        popUp.MessegePopUp("충돌이 일어나서 더 이상 움직일 수 없어요");
+        //        motionCoaching.StopMotion();
+        //        //for (int i = 0; i < joints.Length; i++)
+        //        //    cdJoints[i].RotateJoint(0);
+        //        StartCoroutine(robot.SetBasePos());
+        //    }
                 
-            else
-                SendAngle();
+        //    else
+        //        SendAngle();
+        //}
+        //else
+        //    SendAngle();
+
+        if (!CollisionManager.neckMove || !CollisionManager.leftArmMove || !CollisionManager.rightArmMove)
+        {
+            popUp.MessegePopUp("충돌이 일어나서 더 이상 움직일 수 없어요");
+            motionCoaching.StopMotion();
+            if (StateUpdater.isCallingADV)
+                StartCoroutine(robot.SetBasePos());
         }
         else
             SendAngle();

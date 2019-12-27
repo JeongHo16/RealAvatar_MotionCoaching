@@ -60,7 +60,7 @@ public class Kinematics : MonoBehaviour
 
     }
 
-    public void InverseKinematics(string part, string dir)
+    public float[] InverseKinematics(string part, string dir)
     {
         moccaPart = part;
         direction = dir;
@@ -73,6 +73,8 @@ public class Kinematics : MonoBehaviour
             CalculateInverse(end_lx, end_ly, end_lz, false);
             CalculateInverse(end_rx, end_ry, end_rz, true);
         }
+
+        return afterAngles;
         
     }
 
@@ -169,11 +171,11 @@ public class Kinematics : MonoBehaviour
                 
                 LimitStretchPose();
 
-                if (StateUpdater.isCanInverse)
-                {
-                    for (int i = 0; i < cdTransforms.Length; i++)
-                        StartCoroutine(MovingInverse(cdTransforms[i], i));
-                }
+                //if (StateUpdater.isCanInverse)
+                //{
+                //    for (int i = 0; i < cdTransforms.Length; i++)
+                //        StartCoroutine(MovingInverse(cdTransforms[i], i));
+                //}
             }
         }
     }

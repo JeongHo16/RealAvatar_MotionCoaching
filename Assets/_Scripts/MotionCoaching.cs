@@ -19,15 +19,13 @@ public class MotionCoaching : MonoBehaviour
     private CDJoint[] cdJoints;
 
     float[][] tempMotionData;
-    string[] splitOutput;
-
-    string[] firstSplit;
-    string[] secondSplit;
-    string[] thirdSplit;
-
-    private int highSpeedLimit = 0;
-
+    string[][] splitOutput;
+    float[][] tempDataFile;
+    float time;
+    bool coroutine_running = false;
+    bool canADV = false;
     bool canMove = true;
+
     public Coroutine coroutine;
 
     int facesave = 0;
@@ -45,7 +43,10 @@ public class MotionCoaching : MonoBehaviour
     private void Update()
     {
         if (SpeechRecognition.receive == true)
-            playResultGesture();
+        {
+            MakeUpMotionDataFile();
+
+        }
         if (StateUpdater.isSpeakingAgain)
         {
             popUpMessege.MessegePopUp("다시 한번 말해주세요");
@@ -58,8 +59,9 @@ public class MotionCoaching : MonoBehaviour
             canMove = true;
         }
     }
-    public void playResultGesture()
+    public void MakeUpMotionDataFile()
     {
+        SpeechRecognition.receive = false;
         face.Clear();
         string keys = SpeechRecognition.output.result;
         resultText.text = keys;
@@ -71,75 +73,159 @@ public class MotionCoaching : MonoBehaviour
 
         else
         {
-            splitOutput = keys.Split(hyphen);
-            switch (splitOutput[0])
+            splitOutput = SplitKeys(keys);
+            if (keys.Contains("DYN"))
             {
-                case "몸몸통바퀴":
-                    popUpMessege.MessegePopUp("일치하는 동작이 없어요");
-                    break;
 
-                case "얼굴표정":
-                    faceAni();
+                if (splitOutput[0][2] == "머리")
+                    MovingNeck();
+                else
+                {
+                    kinematics.ForwardKinematics();
+                    tempDataFile[0] = kinematics.InverseKinematics(splitOutput[0][1], splitOutput[0][2]);
+                }
+                motionDataFile = tempDataFile;
+            }
+            else if (keys.Contains("DEG"))
+            {
+                string degree = splitOutput[splitOutput.Length - 1][1];
+                string parts = splitOutput[0][0];
 
-                    break;
+                switch (degree)
+                {
+                    case "0도":
+                    case "12시":
+                        degree = "12시";
+                        break;
 
-                case "전신":
-                    wholeBody(keys);
-                    break;
+                    case "30도":
+                    case "1시":
+                        degree = "1시";
+                        break;
 
-                case "DYN":
-                    if (splitOutput[2] == "고개" || splitOutput[2] == "왼쪽" || splitOutput[2] == "오른쪽" || splitOutput[2] == "머리")
-                    {
-                        MovingNeck();
-                    }
-                    else
-                    {
-                        kinematics.ForwardKinematics();
-                        kinematics.InverseKinematics(splitOutput[2], splitOutput[1]);
-                    }
-                    break;
+                    case "60도":
+                    case "2시":
+                        degree = "2시";
+                        break;
 
-                case "ADV":
-                    StateUpdater.isCallingADV = true;
-                    switchFaceAni(facesave);
-                    if (splitOutput[1] == "속도강")
-                    {
-                        if (++highSpeedLimit == 1)
-                            MotionSpeedUp();
-                        else
+                    case "90도":
+                    case "3시":
+                        degree = "3시";
+                        break;
+
+                    case "-30도":
+                    case "11시":
+                        degree = "11시";
+                        break;
+
+                    case "-60도":
+                    case "10시":
+                        degree = "10시";
+                        break;
+
+                    case "-90도":
+                    case "9시":
+                        degree = "9시";
+                        break;
+
+                }
+                string ctrldeg = parts + "-DEG-" + degree;
+                motionDataFile = CopyFloatArray(ctrldeg);
+            }
+            else
+            {
+                switch (splitOutput[0][1])
+                {
+                    case "몸몸통바퀴":
+                        popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+                        break;
+
+                    case "얼굴표정":
+                        faceAni();
+                        break;
+
+                    case "전신":
+                        wholeBody(keys);
+                        break;
+
+                    default:
+                        for (int i = 0; i < motionOnly.Length; i++)
                         {
-                            StartCoroutine(robot.GestureProcess(motionDataFile));
-                            popUpMessege.MessegePopUp("더 빠르게 할 수 없어요");
-                        }
-
-                    }
-                    else if (splitOutput[1] == "속도약")
-                        MotionSpeedDown();
-                    else if (splitOutput[1] == "각도강")
-                        MotionExpansion();
-                    else if (splitOutput[1] == "각도약")
-                        MotionReduction();
-                    break;
-
-                default:
-                    for (int i = 0; i < motionOnly.Length; i++)
-                    {
-                        if (splitOutput[0] == motionOnly[i])
-                        {
-                            facesave = 0;
-                            motionDataFile = CopyFloatArray(keys);
-
-                            if (motionDataFile != null)
+                            if (splitOutput[0][1] == motionOnly[i])
                             {
-                                StartCoroutine(robot.GestureProcess(motionDataFile));
-                                break;
+                                facesave = 0;
+                                motionDataFile = CopyFloatArray(keys);
                             }
                         }
-                    }
+                        break;
+                }
+            }
+        }
+
+        if (keys.Contains("ADV"))
+        {
+            StateUpdater.isCallingADV = true;
+            int index = 0;
+            for (int i = 0; i < splitOutput[i].Length; i++)
+            {
+                if (splitOutput[i].Equals("ADV"))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            switch(splitOutput[index][1])
+            {
+                case "속도강":
+                    MotionSpeedUp();
+                    break;
+                case "속도약":
+                    MotionSpeedDown();
+                    break;
+                case "각도강":
+                    MotionExpansion();
+                    break;
+                case "각도약":
+                    MotionReduction();
                     break;
             }
-            SpeechRecognition.receive = false;
+            
+              
         }
+
+        if (canADV)
+        {
+            if (keys.Contains("DUR"))
+            {
+                GetDurTime();
+                if (motionDataFile.Length == 1)
+                {
+                    PlayAndWait();
+                }
+                else
+                {
+                    coroutine = StartCoroutine(RepeatMotion());
+                    StartCoroutine(CountTime(time));
+                }
+            }
+            else
+            {
+                StartCoroutine(robot.GestureProcess(motionDataFile));
+            }
+        }
+
+        else
+            popUpMessege.MessegePopUp("더 이상 빨라질 수 없어요");
+        
+
+
+    }
+
+    IEnumerator PlayAndWait()
+    {
+        yield return StartCoroutine(robot.GestureProcess(motionDataFile));
+        StartCoroutine(CountTime(time));
     }
 
     float[][] CopyFloatArray(string key)
@@ -160,88 +246,89 @@ public class MotionCoaching : MonoBehaviour
 
     public void faceAni()
     {
-        if (splitOutput[1] == "무표정")
-            facesave = 0;
-        else if (splitOutput[1] == "기쁨")
-            facesave = 5;
-        else if (splitOutput[1] == "화남" || splitOutput[1] == "혐오싫음")
-            facesave = 2;
-        else if (splitOutput[1] == "두려움")
-            facesave = 3;
-        else if (splitOutput[1] == "슬픔")
-            facesave = 4;
-        //else if (splitOutput[1] == "미소")  // 사전에 smile 표정만 하는 거 없음.
-        //    facesave = 1;
-        else if (splitOutput[1] == "놀람")
-            facesave = 6;
-        //if (splitOutput[1] == "")  // 사전에 speak 없음.
-        //    facesave = 7;
-        else if (splitOutput[1] == "왼쪽윙크")
-            facesave = 8;
-        else if (splitOutput[1] == "오른쪽윙크")
-            facesave = 9;
-        //else if (splitOutput[1] == "")
-        //    facesave = 10;
-        //else if (splitOutput[1] == "")
-        //    facesave = 11;
-        //else if (splitOutput[1] == "")
-        //    facesave = 12;
-        //else if (splitOutput[1] == "")
-        //    facesave = 13;
+        switch (splitOutput[0][1])
+        {
+            case "무표정":
+                facesave = 0;
+                break;
+            case "기쁨":
+                facesave = 5;
+                break;
+            case "화남":
+            case "혐오싫음":
+                facesave = 2;
+                break;
+            case "두려움":
+                facesave = 3;
+                break;
+            case "슬픔":
+                facesave = 4;
+                break;
+            case "놀람":
+                facesave = 6;
+                break;
+            case "왼쪽윙크":
+                facesave = 8;
+                break;
+            case "오른쪽윙크":
+                facesave = 9;
+                break;
 
-        switchFaceAni(facesave);
+        }
 
     }
 
 
     void wholeBody(string key)
     {
-        if (splitOutput[1] == "(규모 등에)놀람")
-            facesave = 6;
-        else if (splitOutput[1] == "(소리 등에)놀람")
-            facesave = 6;
-        else if (splitOutput[1] == "고개숙여인사")
-            facesave = 5;
-        else if (splitOutput[1] == "긍정")
-            facesave = 5;
-        else if (splitOutput[1] == "부정")
-            facesave = 4;
-        else if (splitOutput[1] == "슬픔")
-            facesave = 4;
-        else if (splitOutput[1] == "악수")
-            facesave = 5;
-        else if (splitOutput[1] == "졸림")
-            facesave = 11;
-        else if (splitOutput[1] == "집중")
-            facesave = 0;
-        else if (splitOutput[1] == "칭찬")
-            facesave = 5;
-        else if (splitOutput[1] == "기본자세")
-            facesave = 0;
-        else if (splitOutput[1] == "기쁨")
-            facesave = 5;
-        else if (splitOutput[1] == "두려움")
-            facesave = 3;
-        else if (splitOutput[1] == "부끄러움")
-            facesave = 11;
-        else if (splitOutput[1] == "제안")
-            facesave = 0;
-        else if (splitOutput[1] == "팔로인사")
-            facesave = 9;
-        else if (splitOutput[1] == "혐오싫음")
-            facesave = 2;
-        else if (splitOutput[1] == "화남")
-            facesave = 2;
-        else if (splitOutput[1] == "회피")
-            facesave = 12;
-        else if (splitOutput[1] == "허그")
-            facesave = 5;
-        else if (splitOutput[1] == "만세")
-            facesave = 5;
-        else if (splitOutput[1] == "생각")
-            facesave = 10;
+        switch (splitOutput[0][1])
+        {
+            case "집중":
+            case "기본자세":
+            case "제안":
+                facesave = 0; break;
 
-        if (splitOutput[1] == "정지")
+            case "혐오싫음":
+            case "화남":
+                facesave = 2; break;
+
+            case "두려움":
+                facesave = 3; break;
+
+            case "부정":
+            case "슬픔":
+                facesave = 4; break;
+
+            case "고개숙여인사":
+            case "긍정":
+            case "악수":
+            case "칭찬":
+            case "기쁨":
+            case "허그":
+            case "만세":
+                facesave = 5; break;
+
+            case "(규모 등에) 놀람":
+            case "(소리 등에)놀람":
+                facesave = 6; break;
+
+            case "팔로인사":
+                facesave = 9; break;
+
+            case "생각":
+                facesave = 10; break;
+
+            case "부끄러움":
+            case "졸림":
+                facesave = 11; break;
+
+            case "회피":
+                facesave = 12; break;
+
+
+        }
+
+        if (splitOutput[0][1] == "정지")
         {
             facesave = 0;
             switchFaceAni(facesave);
@@ -251,64 +338,66 @@ public class MotionCoaching : MonoBehaviour
 
         else
         {
-            switchFaceAni(facesave);
             //motionDataFile = robot.keyMotionTable(key);
-            motionDataFile=CopyFloatArray(key);
-            coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+            motionDataFile = CopyFloatArray(key);
         }
-        
+
     }
 
     void MotionSpeedUp()
     {
-        for (int i = 0; i < tempMotionData.Length; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            tempMotionData[i][0] = tempMotionData[i][0] * 0.3f;
+            if (motionDataFile[i][0] / 2f > 1f)
+            {
+                motionDataFile[i][0] /= 2f;
+                continue;
+            }
+            else
+            {
+                canADV = false;
+                break;
+            }
         }
-
-        StartCoroutine(robot.GestureProcess(tempMotionData));
 
     }
 
     void MotionSpeedDown()
     {
-        for (int i = 0; i < tempMotionData.Length; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            tempMotionData[i][0] = tempMotionData[i][0] * 2.5f;
+            motionDataFile[i][0] *= 2f;
         }
-
-        StartCoroutine(robot.GestureProcess(tempMotionData));
+        
     }
 
     void MotionExpansion()
     {
 
-        for (int i = 0; i < tempMotionData.Length; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            for (int j = 1; j < tempMotionData[i].Length; j++)
+            for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                tempMotionData[i][j] = tempMotionData[i][j] * 1.3f;
+                motionDataFile[i][j] = motionDataFile[i][j] * 1.3f;
                 limitMinMax(i, j);
             }
 
         }
-        coroutine = StartCoroutine(robot.GestureProcess(tempMotionData));
     }
 
     void MotionReduction()
     {
 
-        for (int i = 0; i < tempMotionData.Length; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            for (int j = 1; j < tempMotionData[i].Length; j++)
+            for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                tempMotionData[i][j] = tempMotionData[i][j] * 0.7f;
+                motionDataFile[i][j] = motionDataFile[i][j] * 0.7f;
                 limitMinMax(i, j);
 
             }
 
         }
-        coroutine = StartCoroutine(robot.GestureProcess(tempMotionData));
     }
     void limitMinMax(int i, int j)
     {
@@ -397,40 +486,41 @@ public class MotionCoaching : MonoBehaviour
 
     void MovingNeck()
     {
-        float angle_y = cdJoints[6].GetCurrentAngle;
-        float angle_x = cdJoints[7].GetCurrentAngle;
-        float angle = 0;
-        int index = 0;
-        if (splitOutput[1] == "상")
-        {
-            index = 7;
-            angle = angle_x - 20f;
-        }
-        else if (splitOutput[1] == "하")
-        {
-            index = 7;
-            angle = angle_x + 5f;
-        }
-        else if (splitOutput[1] == "좌")
-        {
-            index = 6;
-            angle = angle_y - 20f;
-        }
-        else if (splitOutput[1] == "우")
-        {
-            index = 6;
-            angle = angle_y + 20f;
-        }
+        for (int i = 0; i < 8; i++)
+            tempDataFile[0][i] = cdJoints[i].GetCurrentAngle;
 
-        if (angle >= 180)
-            angle -= 360;
-        CheckNeckAngle(angle, index);
+        switch(splitOutput[0][1])
+        {
+            case "상":
+                tempDataFile[0][7] -= 20f;
+                break;
+            case "하":
+                tempDataFile[0][7] += 5f;
+                break;
+            case "좌":
+                tempDataFile[0][6] -= 20f;
+                break;
+            case "우":
+                tempDataFile[0][6] += 20f; ;
+                break;
+        }
+        
+        CheckNeckAngle();
 
-        if (canMove)
-            StartCoroutine(cdJoints[index].SetQuatLerp(angle, 0.3f));
     }
 
-    void CheckNeckAngle(float angle, int index)
+    void CheckNeckAngle()
+    {
+        for(int i=6; i<8; i++)
+        {
+            if (tempDataFile[0][i] >= 180f)
+                tempDataFile[0][i] -= 360f;
+            LimitNeckAngle(i, tempDataFile[0][i]);
+        }
+        
+    }
+
+    void LimitNeckAngle(int index, float angle)
     {
         switch (index)
         {
@@ -440,12 +530,101 @@ public class MotionCoaching : MonoBehaviour
                 break;
             case 7:
                 if (angle > 13 || angle < -60)
-                    canMove = false;
+                    canMove = false;    
+                break;
+        }
+    }
+    string[][] SplitKeys(string key)
+    {
+        string[] splitOutput_slash = key.Split(slash);
+        string[][] result = new string[splitOutput_slash.Length][];
+        for (int i = 0; i < splitOutput_slash.Length; i++)
+        {
+            splitOutput[i] = splitOutput_slash[i].Split(hyphen);
+        }
+        return result;
+    }
+
+    void basicPlay(float[][] motionDataFile)
+    {
+        if (motionDataFile == null)
+        {
+            popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+        }
+
+        else
+        {
+            switchFaceAni(facesave);
+            coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+        }
+
+    }
+
+    IEnumerator CountTime(float time)
+    {
+        float elapsedTime = 0.0f;
+        while (elapsedTime < time)
+        {
+            elapsedTime += Time.deltaTime;
+
+            yield return Time.deltaTime;
+        }
+        if (coroutine_running)
+            StopCoroutine(coroutine);
+        StartCoroutine(robot.SetBasePos());
+
+    }
+
+    void GetDurTime()
+    {
+        int index = 0;
+        float time = 0f;
+        for (int i = 0; i < splitOutput.Length; i++)
+        {
+            if (splitOutput[i][0] == "DUR")
+            {
+                index = i;
+                break;
+            }
+        }
+        char[] dur_time = splitOutput[index][1].ToCharArray();
+        string timestr = "";
+        for (int i = 0; i < dur_time.Length - 1; i++)
+        {
+            timestr += dur_time[i];
+        }
+        time = float.Parse(timestr);
+        switch (dur_time[dur_time.Length - 1])
+        {
+            case '초':
+                break;
+            case '분':
+                time *= 60f;
+                break;
+            case '시':
+                time *= 3600f;
                 break;
         }
     }
 
-    
+    IEnumerator RepeatMotion()
+    {
+        float playTime = 0;
+        for (int i = 0; i < motionDataFile.Length - 1; i++)
+        {
+            playTime += motionDataFile[0][i];
+        }
+
+        while (true)
+        {
+            coroutine_running = true;
+            StartCoroutine(robot.GestureProcess(motionDataFile));
+            yield return playTime;
+        }
+        
+    }
+
+
 
 }
 
