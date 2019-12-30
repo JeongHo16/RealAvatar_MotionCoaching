@@ -653,109 +653,109 @@ namespace REEL.PoseAnimation
 
         float[][] rightArm_12List = 
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 90f, 0f,     0f, 0f    },
+            new float[9] {  0.7f,       45f, -45f, -45f,    0f, 90f, 0f,     0f, 0f    },
         };
 
         float[][] rightArm_1List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 60f, 0f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 60f, 0f,     0f, 0f    },
         };
 
         float[][] rightArm_2List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 30f, 0f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 30f, 0f,     0f, 0f    },
         };
 
         float[][] rightArm_3List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 0f, 0f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 0f, 0f,     0f, 0f    },
         };
 
         float[][] rightArm_9List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 90f, 90f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 90f, 90f,     0f, 0f    },
         };
 
         float[][] rightArm_10List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 90f, 60f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 90f, 60f,     0f, 0f    },
         };
 
         float[][] rightArm_11List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    0f, 90f, 30f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    0f, 90f, 30f,     0f, 0f    },
         };
 
 
         float[][] leftArm_12List =
         {
-            new float[9] {  0.2f,       0f, -90f, 0f,  -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       0f, -90f, 0f,  -45f, 45f, 45f,     0f, 0f    },
         };
 
         float[][] leftArm_1List =
         {
-            new float[9] {  0.3f,       0f, -90f, -30f,  -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       0f, -90f, -30f,  -45f, 45f, 45f,     0f, 0f    },
         };
 
         float[][] leftArm_2List =
         {
-            new float[9] {  0.3f,       0f, -90f, -60f,  -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       0f, -90f, -60f,  -45f, 45f, 45f,     0f, 0f    },
         };
 
         float[][] leftArm_3List =
         {
-            new float[9] {  0.3f,       0f, -90f, -90f,  -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       0f, -90f, -90f,  -45f, 45f, 45f,     0f, 0f    },
         };
 
         float[][] leftArm_9List =
         {
-            new float[9] {  0.3f,       0f, 0f, 0f,   -45f, 45f, 45f,    0f, 0f    },
+            new float[9] { 0.7f,       0f, 0f, 0f,   -45f, 45f, 45f,    0f, 0f    },
         };
 
         float[][] leftArm_10List =
         {
-            new float[9] {  0.3f,       0f, -30f, 0f,   -45f, 45f, 45f,      0f, 0f    },
+            new float[9] { 0.7f,       0f, -30f, 0f,   -45f, 45f, 45f,      0f, 0f    },
         };
 
         float[][] leftArm_11List =
         {
-            new float[9] {  0.3f,       0f, -60f, 0f,    -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       0f, -60f, 0f,    -45f, 45f, 45f,     0f, 0f    },
         };
 
 
         float[][] head_12List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     0f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     0f, 0f    },
         };
 
         float[][] head_1List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     -30f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     -30f, 0f    },
         };
 
         float[][] head_2List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     -60f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     -60f, 0f    },
         };
 
         float[][] head_3List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     -90f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     -90f, 0f    },
         };
 
         float[][] head_9List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     90f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     90f, 0f    },
         };
 
         float[][] head_10List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     60f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     60f, 0f    },
         };
 
         float[][] head_11List =
         {
-            new float[9] {  0.3f,       45f, -45f, -45f,    -45f, 45f, 45f,     30f, 0f    },
+            new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     30f, 0f    },
         };
 
 
