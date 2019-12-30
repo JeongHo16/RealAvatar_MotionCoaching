@@ -27,6 +27,7 @@ public class MotionCoaching : MonoBehaviour
     bool canMove = true;
     bool onlyFace = false;
     public Coroutine coroutine;
+    public static bool degBase = false;
 
     int facesave = 0;
 
@@ -87,13 +88,14 @@ public class MotionCoaching : MonoBehaviour
                     
                     Debug.Log("-------------temp--------");
                     for (int i = 0; i < temp.Length; i++)
-                        tempDataFile[0][i] = temp[i];
+                        tempDataFile[0] = temp;
                 }
                 
                 motionDataFile = tempDataFile;
             }
             else if (keys.Contains("DEG"))
             {
+                degBase = true;
                 string degree = splitOutput[splitOutput.Length - 1][1];
                 string parts = splitOutput[0][0];
 
@@ -101,37 +103,37 @@ public class MotionCoaching : MonoBehaviour
                 {
                     case "0도":
                     case "12시":
-                        degree = "12시";
+                        degree = "0도";
                         break;
 
                     case "30도":
                     case "1시":
-                        degree = "1시";
+                        degree = "30도";
                         break;
 
                     case "60도":
                     case "2시":
-                        degree = "2시";
+                        degree = "60도";
                         break;
 
                     case "90도":
                     case "3시":
-                        degree = "3시";
+                        degree = "90도";
                         break;
 
-                    case "-30도":
+                    case "330도":
                     case "11시":
-                        degree = "11시";
+                        degree = "-30도";
                         break;
 
-                    case "-60도":
+                    case "300도":
                     case "10시":
-                        degree = "10시";
+                        degree = "-60도";
                         break;
 
-                    case "-90도":
+                    case "270도":
                     case "9시":
-                        degree = "9시";
+                        degree = "-90도";
                         break;
 
                 }
@@ -140,6 +142,15 @@ public class MotionCoaching : MonoBehaviour
             }
             else
             {
+                string sendKey = "";
+                for (int j = 0; j < splitOutput[0].Length; j++)
+                {
+                    sendKey += splitOutput[0][j];
+                    if (j == splitOutput[0].Length - 1)
+                        break;
+                    sendKey += "-";
+                }
+
                 switch (splitOutput[0][0])
                 {
                     case "몸몸통바퀴":
@@ -152,7 +163,7 @@ public class MotionCoaching : MonoBehaviour
                         break;
 
                     case "전신":
-                        wholeBody(keys);
+                        wholeBody(sendKey);
                         break;
 
                     default:
@@ -160,8 +171,9 @@ public class MotionCoaching : MonoBehaviour
                         {
                             if (splitOutput[0][0] == motionOnly[i])
                             {
+                                
                                 facesave = 0;
-                                motionDataFile = CopyFloatArray(keys);
+                                motionDataFile = CopyFloatArray(sendKey);
                             }
                         }
                         break;
@@ -221,7 +233,7 @@ public class MotionCoaching : MonoBehaviour
                 switchFaceAni(facesave);
                 if (!onlyFace)
                 {
-                    StartCoroutine(robot.GestureProcess(motionDataFile));
+                    coroutine=StartCoroutine(robot.GestureProcess(motionDataFile));
                 }
                 onlyFace = false;
                 
@@ -297,7 +309,7 @@ public class MotionCoaching : MonoBehaviour
     }
 
 
-    void wholeBody(string key)
+    void wholeBody(string sendKey)
     {
         switch (splitOutput[0][1])
         {
@@ -357,9 +369,9 @@ public class MotionCoaching : MonoBehaviour
         else
         {
             //motionDataFile = robot.keyMotionTable(key);
-            motionDataFile = CopyFloatArray(key);
+            motionDataFile = CopyFloatArray(sendKey);
             Debug.Log(motionDataFile.Length);
-            Debug.Log(key);
+            Debug.Log(sendKey);
         }
 
     }
@@ -425,25 +437,25 @@ public class MotionCoaching : MonoBehaviour
         {
             case 0:
             case 3:
-                Mathf.Clamp(tempMotionData[i][j], -90.0f, 90.0f);
+                Mathf.Clamp(motionDataFile[i][j], -90.0f, 90.0f);
                 break;
             case 1:
-                Mathf.Clamp(tempMotionData[i][j], -20.0f, 90.0f);
+                Mathf.Clamp(motionDataFile[i][j], -20.0f, 90.0f);
                 break;
             case 2:
-                Mathf.Clamp(tempMotionData[i][j], 0f, 90.0f);
+                Mathf.Clamp(motionDataFile[i][j], 0f, 90.0f);
                 break;
             case 4:
-                Mathf.Clamp(tempMotionData[i][j], -90.0f, 20.0f);
+                Mathf.Clamp(motionDataFile[i][j], -90.0f, 20.0f);
                 break;
             case 5:
-                Mathf.Clamp(tempMotionData[i][j], -90.0f, 0f);
+                Mathf.Clamp(motionDataFile[i][j], -90.0f, 0f);
                 break;
             case 6:
-                Mathf.Clamp(tempMotionData[i][j], -40.0f, 40.0f);
+                Mathf.Clamp(motionDataFile[i][j], -40.0f, 40.0f);
                 break;
             case 7:
-                Mathf.Clamp(tempMotionData[i][j], -30.0f, 15.0f);
+                Mathf.Clamp(motionDataFile[i][j], -30.0f, 15.0f);
                 break;
         }
     }
@@ -451,8 +463,12 @@ public class MotionCoaching : MonoBehaviour
 
     public void StopMotion()
     {
-        StopCoroutine(coroutine);
-        face.Clear();
+        if (!(coroutine == null))
+        {
+            StopCoroutine(coroutine);
+            face.Clear();
+        }
+
     }
 
     public void switchFaceAni(int i)

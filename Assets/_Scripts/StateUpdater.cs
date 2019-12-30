@@ -10,4 +10,5 @@
     public static bool isCallingADV = false;
     public static bool isSpeakingAgain = false;
     public static bool isInputEntered = false;
+    public static bool isLongMDFinDUR = false;
 }

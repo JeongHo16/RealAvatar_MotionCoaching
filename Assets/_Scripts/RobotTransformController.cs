@@ -1067,7 +1067,7 @@ namespace REEL.PoseAnimation
                 //Debug.Log(motionInfo[ix][8]);
 
                 // 첫 번째 각도 설정인 경우, 최대 회전 각도를 기반으로 회전 시간 계산.
-                if (ix == 0)
+                if (ix == 0 && motionInfo.Length != 1)
                 {
                     float maxDegree = GetDurationToFirstAngle(motionInfo[0]);
                     rotDuration = maxDegree / (rotSpeed * rotSpeedPercentage);

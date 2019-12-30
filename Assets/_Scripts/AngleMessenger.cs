@@ -44,8 +44,12 @@ public class AngleMessenger : MonoBehaviour
         {
             popUp.MessegePopUp("충돌이 일어나서 더 이상 움직일 수 없어요");
             motionCoaching.StopMotion();
-            if (StateUpdater.isCallingADV)
+            if (StateUpdater.isCallingADV || MotionCoaching.degBase)
+            {
                 StartCoroutine(robot.SetBasePos());
+                MotionCoaching.degBase = false;
+            }
+
         }
         else
             SendAngle();
