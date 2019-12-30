@@ -20,12 +20,12 @@ public class MotionCoaching : MonoBehaviour
 
     float[][] tempMotionData;
     string[][] splitOutput;
-    float[][] tempDataFile;
+    float[][] tempDataFile = new float[1][];
     float time;
     bool coroutine_running = false;
-    bool canADV = false;
+    bool canADV = true;
     bool canMove = true;
-
+    bool onlyFace = false;
     public Coroutine coroutine;
 
     int facesave = 0;
@@ -81,9 +81,15 @@ public class MotionCoaching : MonoBehaviour
                     MovingNeck();
                 else
                 {
+                    float[] temp;
                     kinematics.ForwardKinematics();
-                    tempDataFile[0] = kinematics.InverseKinematics(splitOutput[0][1], splitOutput[0][2]);
+                    temp = kinematics.InverseKinematics(splitOutput[0][2], splitOutput[0][1]);
+                    
+                    Debug.Log("-------------temp--------");
+                    for (int i = 0; i < temp.Length; i++)
+                        tempDataFile[0][i] = temp[i];
                 }
+                
                 motionDataFile = tempDataFile;
             }
             else if (keys.Contains("DEG"))
@@ -134,13 +140,14 @@ public class MotionCoaching : MonoBehaviour
             }
             else
             {
-                switch (splitOutput[0][1])
+                switch (splitOutput[0][0])
                 {
                     case "몸몸통바퀴":
                         popUpMessege.MessegePopUp("일치하는 동작이 없어요");
                         break;
 
                     case "얼굴표정":
+                        onlyFace = true;
                         faceAni();
                         break;
 
@@ -151,7 +158,7 @@ public class MotionCoaching : MonoBehaviour
                     default:
                         for (int i = 0; i < motionOnly.Length; i++)
                         {
-                            if (splitOutput[0][1] == motionOnly[i])
+                            if (splitOutput[0][0] == motionOnly[i])
                             {
                                 facesave = 0;
                                 motionDataFile = CopyFloatArray(keys);
@@ -168,7 +175,7 @@ public class MotionCoaching : MonoBehaviour
             int index = 0;
             for (int i = 0; i < splitOutput[i].Length; i++)
             {
-                if (splitOutput[i].Equals("ADV"))
+                if (splitOutput[i][0].Equals("ADV"))
                 {
                     index = i;
                     break;
@@ -194,7 +201,7 @@ public class MotionCoaching : MonoBehaviour
               
         }
 
-        if (canADV)
+        if (canADV || StateUpdater.isCanInverse)
         {
             if (keys.Contains("DUR"))
             {
@@ -211,12 +218,23 @@ public class MotionCoaching : MonoBehaviour
             }
             else
             {
-                StartCoroutine(robot.GestureProcess(motionDataFile));
+                switchFaceAni(facesave);
+                if (!onlyFace)
+                {
+                    StartCoroutine(robot.GestureProcess(motionDataFile));
+                }
+                onlyFace = false;
+                
             }
         }
 
         else
+        {
             popUpMessege.MessegePopUp("더 이상 빨라질 수 없어요");
+            canADV = true;
+        }
+            
+       
         
 
 
@@ -340,6 +358,8 @@ public class MotionCoaching : MonoBehaviour
         {
             //motionDataFile = robot.keyMotionTable(key);
             motionDataFile = CopyFloatArray(key);
+            Debug.Log(motionDataFile.Length);
+            Debug.Log(key);
         }
 
     }
@@ -348,7 +368,7 @@ public class MotionCoaching : MonoBehaviour
     {
         for (int i = 0; i < motionDataFile.Length; i++)
         {
-            if (motionDataFile[i][0] / 2f > 1f)
+            if (motionDataFile[i][0] / 2f > 0.1f)
             {
                 motionDataFile[i][0] /= 2f;
                 continue;
@@ -536,13 +556,23 @@ public class MotionCoaching : MonoBehaviour
     }
     string[][] SplitKeys(string key)
     {
-        string[] splitOutput_slash = key.Split(slash);
-        string[][] result = new string[splitOutput_slash.Length][];
-        for (int i = 0; i < splitOutput_slash.Length; i++)
+        if(key.Contains("/"))
         {
-            splitOutput[i] = splitOutput_slash[i].Split(hyphen);
+            string[] splitOutput_slash = key.Split(slash);
+            string[][] result = new string[splitOutput_slash.Length][];
+            for (int i = 0; i < splitOutput_slash.Length; i++)
+            {
+                result[i] = splitOutput_slash[i].Split(hyphen);
+            }
+            return result;
         }
-        return result;
+        else
+        {
+            string[][] result = new string[1][];
+            result[0] = key.Split(hyphen);
+            return result;
+        }
+        
     }
 
     void basicPlay(float[][] motionDataFile)

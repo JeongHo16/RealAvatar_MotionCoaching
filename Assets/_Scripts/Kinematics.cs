@@ -9,7 +9,7 @@ public class Kinematics : MonoBehaviour
     public Transform[] cdTransforms;
 
     float[] beforeAngles = new float[8];
-    float[] afterAngles = new float[8];
+    float[] afterAngles = new float[9];
 
     float l_d1 = -0.235f;
     float l_a2 = -0.62f;
@@ -63,6 +63,7 @@ public class Kinematics : MonoBehaviour
     public float[] InverseKinematics(string part, string dir)
     {
         moccaPart = part;
+        Debug.Log(moccaPart);
         direction = dir;
         if (part == "왼팔")
             CalculateInverse(end_lx, end_ly, end_lz, false);
@@ -73,7 +74,10 @@ public class Kinematics : MonoBehaviour
             CalculateInverse(end_lx, end_ly, end_lz, false);
             CalculateInverse(end_rx, end_ry, end_rz, true);
         }
-
+        afterAngles[7] = 0f;
+        afterAngles[8] = 0f;
+        for (int i = 0; i < afterAngles.Length; i++)
+            Debug.Log(afterAngles[i]);
         return afterAngles;
         
     }
@@ -139,33 +143,34 @@ public class Kinematics : MonoBehaviour
 
             if (cos_th_1 == 0 || cos_th_2 == 0 || cos_th_3 == 0)
                 StateUpdater.isCanInverse = false;
-
+         
             if (StateUpdater.isCanInverse)
             {
                 if (!right)
                 {
-
-                    afterAngles[0] = Mathf.Atan2(sin_th_1, cos_th_1) * Mathf.Rad2Deg;
-                    afterAngles[1] = Mathf.Atan2(sin_th_2, cos_th_2) * Mathf.Rad2Deg;
-                    afterAngles[2] = Mathf.Atan2(sin_th_3, cos_th_3) * Mathf.Rad2Deg;
+                    afterAngles[1] = Mathf.Atan2(sin_th_1, cos_th_1) * Mathf.Rad2Deg;
+                    afterAngles[2] = Mathf.Atan2(sin_th_2, cos_th_2) * Mathf.Rad2Deg;
+                    afterAngles[3] = Mathf.Atan2(sin_th_3, cos_th_3) * Mathf.Rad2Deg;
                 }
                 else
                 {
-
-                    afterAngles[3] = Mathf.Atan2(sin_th_1, cos_th_1) * Mathf.Rad2Deg;
-                    afterAngles[4] = Mathf.Atan2(sin_th_2, cos_th_2) * Mathf.Rad2Deg;
-                    afterAngles[5] = Mathf.Atan2(sin_th_3, cos_th_3) * Mathf.Rad2Deg;
-
+                    afterAngles[4] = Mathf.Atan2(sin_th_1, cos_th_1) * Mathf.Rad2Deg;
+                    afterAngles[5] = Mathf.Atan2(sin_th_2, cos_th_2) * Mathf.Rad2Deg;
+                    afterAngles[6] = Mathf.Atan2(sin_th_3, cos_th_3) * Mathf.Rad2Deg;
+                    
                 }
 
-                for (int i = 0; i < afterAngles.Length; i++)
+                
+                for (int i = 1; i < afterAngles.Length; i++)
                 {
+                    
                     if (float.IsNaN(afterAngles[i]))
                         afterAngles[i] = 0;
                 }
 
-                limitAngle(ref afterAngles, 0);
-                limitAngle(ref afterAngles, 3);
+
+                limitAngle(ref afterAngles, 1);
+                limitAngle(ref afterAngles, 4);
                 LimitInverseAngle();
 
                 
@@ -213,24 +218,24 @@ public class Kinematics : MonoBehaviour
 
     public void LimitInverseAngle()
     {
-        for (int i = 0; i < afterAngles.Length; i++)
+        for (int i = 1; i < afterAngles.Length; i++)
         {
             switch (i)
             {
-                case 0:
-                case 3:
+                case 1:
+                case 4:
                     Mathf.Clamp(afterAngles[i], -90.0f, 90.0f);
                     break;
-                case 1:
+                case 2:
                     Mathf.Clamp(afterAngles[i], -20.0f, 90.0f);
                     break;
-                case 2:
+                case 3:
                     Mathf.Clamp(afterAngles[i], 0f, 90.0f);
                     break;
-                case 4:
+                case 5:
                     Mathf.Clamp(afterAngles[i], -90.0f, 20.0f);
                     break;
-                case 5:
+                case 6:
                     Mathf.Clamp(afterAngles[i], -90.0f, 0f);
                     break;
 
@@ -240,7 +245,7 @@ public class Kinematics : MonoBehaviour
 
     public void CheckNaN()
     {
-        for (int i = 0; i < afterAngles.Length; i++)
+        for (int i = 1; i < afterAngles.Length; i++)
         {
             if (float.IsNaN(afterAngles[i]))
                 afterAngles[i] = 0;
@@ -257,18 +262,18 @@ public class Kinematics : MonoBehaviour
         {
             if (moccaPart == "오른팔")
             {
-                val0 = afterAngles[3];
-                val1 = afterAngles[4];
-                val2 = afterAngles[5];
+                val0 = afterAngles[4];
+                val1 = afterAngles[5];
+                val2 = afterAngles[6];
  
 
             }
 
             else
             {
-                val0 = afterAngles[0];
-                val1 = afterAngles[1];
-                val2 = afterAngles[2];
+                val0 = afterAngles[1];
+                val1 = afterAngles[2];
+                val2 = afterAngles[3];
             }
 
             if (((Mathf.Abs(val0) < 5.0f && Mathf.Abs(val1) < 5.0f) || (Mathf.Abs(val1) < 5.0f && Mathf.Abs(val2) < 5.0f)))
@@ -283,8 +288,8 @@ public class Kinematics : MonoBehaviour
         else
         {
             
-            if (((Mathf.Abs(afterAngles[3]) < 5.0f && Mathf.Abs(afterAngles[4]) < 5.0f) || (Mathf.Abs(afterAngles[4]) < 5.0f && Mathf.Abs(afterAngles[5]) < 5.0f))
-                || (Mathf.Abs(afterAngles[0]) < 5.0f && Mathf.Abs(afterAngles[1]) < 5.0f) || (Mathf.Abs(afterAngles[1]) < 5.0f && Mathf.Abs(afterAngles[2]) < 5.0f))
+            if (((Mathf.Abs(afterAngles[4]) < 5.0f && Mathf.Abs(afterAngles[5]) < 5.0f) || (Mathf.Abs(afterAngles[5]) < 5.0f && Mathf.Abs(afterAngles[6]) < 5.0f))
+                || (Mathf.Abs(afterAngles[1]) < 5.0f && Mathf.Abs(afterAngles[2]) < 5.0f) || (Mathf.Abs(afterAngles[2]) < 5.0f && Mathf.Abs(afterAngles[3]) < 5.0f))
                 StateUpdater.isCanInverse = false;
             else
                 StateUpdater.isCanInverse = true;
@@ -314,9 +319,10 @@ public class Kinematics : MonoBehaviour
 
         if (angle > 180.0f)
             angle -= 360.0f;
-
         beforeAngles[index] = angle * Mathf.Deg2Rad;
-        afterAngles[index] = angle;
+        if (index == 0)
+            afterAngles[0] = 0.4f;
+        afterAngles[index+1] = angle;
     }
 
 }
