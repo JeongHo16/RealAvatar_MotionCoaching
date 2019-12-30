@@ -220,7 +220,7 @@ public class MotionCoaching : MonoBehaviour
                 GetDurTime();
                 if (motionDataFile.Length == 1)
                 {
-                    PlayAndWait();
+                    StartCoroutine("PlayAndWait");
                 }
                 else
                 {
