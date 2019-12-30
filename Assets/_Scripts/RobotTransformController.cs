@@ -67,6 +67,7 @@ namespace REEL.PoseAnimation
             new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0,  -10   },
             new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, 20     },
             new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, -10    },
+            new float[9] {  0.6f,       45, -45, -45,       -45, 45, 45,        0, 20     },
 
         };
         float[][] noList = {
@@ -74,6 +75,7 @@ namespace REEL.PoseAnimation
             new float[9] {  0.7f,       45, -45, -45,       -45, 45, 45,        -20, 10 },
             new float[9] {  0.7f,       45, -45, -45,       -45, 45, 45,         20, 10 },
             new float[9] {  0.7f,       45, -45, -45,       -45, 45, 45,        -20, 10 },
+            new float[9] {  0.7f,       45, -45, -45,       -45, 45, 45,         20, 10 },
 
         };
 
@@ -81,7 +83,8 @@ namespace REEL.PoseAnimation
         {
             new float[9] {  1.1f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
             new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
-            new float[9] {  0.9f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
+            new float[9] {  0.9f,       -20, -45, -45,    -60, 45, 45,         0, 10  },\
+            new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
 
         };
 
@@ -90,6 +93,7 @@ namespace REEL.PoseAnimation
             new float[9] {  1.6f,       -30, -95, -57,      30, 95, 57,          0, -15 },
             new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,         -14, -2 },
             new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,          0, -15 },
+            new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,         -14, -2 },
 
         };
         float[][] refuseList = {
@@ -120,11 +124,12 @@ namespace REEL.PoseAnimation
             new float[9] {  0.5f,       4,-77,-70,          -4,77,70,            0,-12      },
 
         };
-        float[][] sleepyList = new float[3][] {
+        float[][] sleepyList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
             new float[9] {  0.4f,       50,-71,-11,         -50,71,11,           0,-20      },
             new float[9] {  1.4f,       50,-71,-11,         -50,71,11,           0,20       },
             new float[9] {  0.4f,       50,-71,-11,         -50,71,11,           0,-20      },
+            new float[9] {  1.4f,       50,-71,-11,         -50,71,11,           0,20       },
 
         };
         float[][] thinkingList = new float[5][] {
@@ -186,6 +191,7 @@ namespace REEL.PoseAnimation
             new float[9] {  0.9f,       12,-72,-57,         12,72,57,           0,10  },
             new float[9] {  0.5f,       -12,-72,-57,        -12,72,57,          0,10},
             new float[9] {  0.5f,       12,-72,-57,         12,72,57,           0,20   },
+            new float[9] {  0.5f,       -12,-72,-57,        -12,72,57,          0,10},
 
         };
         float[][] leftNeckList = {
@@ -290,25 +296,28 @@ namespace REEL.PoseAnimation
          new float[9] {  0.8f,       60, -40, -45,       -45, 45, 45,         0, 10 },
 
         };
-        float[][] armsUpdownList = new float[3][] {
+        float[][] armsUpdownList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
             new float[9] {  0.8f,       -40,-45,-45,        40,45,45,           0,10  },
             new float[9] {  0.8f,       60,-40,-45,         -60,45,40,           0,10  },
             new float[9] {  0.8f,       -40,-45,-45,        40,45,45,           0,10  },
+            new float[9] {  0.8f,       60,-40,-45,         -60,45,40,           0,10  },
 
         };
-        float[][] armsUpdownRightList = new float[3][] {
+        float[][] armsUpdownRightList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
             new float[9] {  0.8f,       45,-45,-45,         40,45,45,          0,10  },
             new float[9] {  0.8f,       45,-45,-45,         -60,45,40,           0,10  },
             new float[9] {  0.8f,       45,-45,-45,         40,45,45,          0,10  },
+            new float[9] {  0.8f,       45,-45,-45,         -60,45,40,           0,10  },
 
         };
-        float[][] armsUpdownLeftList = new float[3][] {
+        float[][] armsUpdownLeftList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
-         new float[9] {  0.8f,       -40,-45,-45,        -45, 45, 45,          0,10  },
+            new float[9] {  0.8f,       -40,-45,-45,        -45, 45, 45,          0,10  },
             new float[9] {  0.8f,       60,-40,-45,         -45, 45, 45,           0,10  },
             new float[9] {  0.8f,       -40,-45,-45,        -45, 45, 45,          0,10  },
+            new float[9] {  0.8f,       60,-40,-45,         -45, 45, 45,           0,10  },
 
         };
         float[][] armsInList = {
@@ -443,6 +452,7 @@ namespace REEL.PoseAnimation
             new float[9] {  0.4f,       45f, -45f, -45f,    -45f, 45f, 45f,     -10f, -10f    },
             new float[9] {  0.4f,       45f, -45f, -45f,    -45f, 45f, 45f,     10f, -10f    },
             new float[9] {  0.4f,       45f, -45f, -45f,    -45f, 45f, 45f,     -10f, -10f    },
+            new float[9] {  0.4f,       45f, -45f, -45f,    -45f, 45f, 45f,     10f, -10f    },
 
 
         };
@@ -485,7 +495,6 @@ namespace REEL.PoseAnimation
             new float[9] { 0.6f,    -55.9f, -77f, -55.3f,       -55.1f, 55.2f, 32.5f,   1.3f, 0f },
             new float[9] { 0.6f,    -67.4f, -48.5f, -19.2f,     -51.6f, 51.6f, 34.7f,   -0.9f, 12.9f },
             new float[9] { 0.6f,    -55.9f, -77f, -55.3f,       -55.1f, 55.2f, 32.5f,   1.3f, 0f },
-            new float[9] { 0.6f,    -67.4f, -48.5f, -19.2f,     -51.6f, 51.6f, 34.7f,   -0.9f, 12.9f },
         };
 
         float[][] handShakingList = {
@@ -507,7 +516,6 @@ namespace REEL.PoseAnimation
             new float[9] { 0.6f,    -45.3f, -69f, -54.7f,   49.4f, 67f, 59.3f,      -1f, 1.8f },
             new float[9] { 0.6f,    -51.4f, -55.7f, -3.4f,  49.7f, 49.7f, 23.4f,    -3.1f, 4.9f },
             new float[9] { 0.6f,    -45.3f, -69f, -54.7f,   49.4f, 67f, 59.3f,      -1f, 1.8f },
-            new float[9] { 0.6f,    -51.4f, -55.7f, -3.4f,  49.7f, 49.7f, 23.4f,    -3.1f, 4.9f },
 
         };
 
@@ -530,14 +538,13 @@ namespace REEL.PoseAnimation
             new float[9] { 0.5f,    51.9f, -52f, -29.7f,    65.7f, 40.7f, 26.8f,    -25.3f, 11.9f },
             new float[9] { 0.6f,    51.9f, -52f, -29.7f,    54.4f, 53.4f, 20.9f,    -25.4f, 8f },
             new float[9] { 0.5f,    51.9f, -52f, -29.7f,    65.7f, 40.7f, 26.8f,    -25.3f, 11.9f },
-            new float[9] { 0.6f,    51.9f, -52f, -29.7f,    54.4f, 53.4f, 20.9f,    -25.4f, 8f },
         };
 
         float[][] politeGreetingList = {
             new float[9] { 0.7f,    39.6f, -38.16f, -80.1f,    -32.22f, 41.76f, 80.1f,     -1.71f, 4.23f },
             new float[9] { 0.9f,    39.6f, -45.81f, -80.1f,    -30.24f, 53.64f, 80.1f,     -1.53f, -13.5f },
             new float[9] { 0.7f,    39.6f, -38.16f, -80.1f,    -32.22f, 41.76f, 80.1f,     -1.71f, 4.23f },
-            new float[9] { 1.0f,    39.6f, -40.5f,   -80.1f,    -40.5f,   40.5f,   80.1f,     0f,    0f}
+            new float[9] { 1.0f,    39.6f, -40.5f,   -80.1f,    -40.5f,   40.5f,   80.1f,     0f,    0f},
         };
 
 
@@ -560,14 +567,13 @@ namespace REEL.PoseAnimation
             new float[9] { 0.5f,    -56.4f, -65f, -14.6f,   -45.9f, 56f, 20.9f,     20.8f, -1.6f },
             new float[9] { 0.6f,    -63.2f, -63.2f, -6.4f,  -45.9f, 56f, 20.9f,     20.4f, -2.1f },
             new float[9] { 0.5f,    -56.4f, -65f, -14.6f,   -45.9f, 56f, 20.9f,     20.8f, -1.6f },
-            new float[9] { 0.6f,    -63.2f, -63.2f, -6.4f,  -45.9f, 56f, 20.9f,     20.4f, -2.1f },
         };
 
         float[][] surprisedList = {
             new float[9] { 0.5f,    -68f, -68.3f, -29.4f,   61.1f, 63.5f, 28.6f,    0.2f, 21.2f },
         };
 
-        float[][] armsForwardBackList = new float[7][] {
+        float[][] armsForwardBackList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f    },
             new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
@@ -575,10 +581,9 @@ namespace REEL.PoseAnimation
             new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
 
         };
-        float[][] armsForwardBackRightList = new float[7][] {
+        float[][] armsForwardBackRightList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f    },
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
@@ -586,10 +591,9 @@ namespace REEL.PoseAnimation
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
-            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
 
         };
-        float[][] armsForwardBackLeftList = new float[7][] {
+        float[][] armsForwardBackLeftList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f    },
             new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
@@ -597,7 +601,6 @@ namespace REEL.PoseAnimation
             new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f   },
 
         };
 
