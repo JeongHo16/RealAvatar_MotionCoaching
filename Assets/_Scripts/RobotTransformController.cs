@@ -779,7 +779,7 @@ namespace REEL.PoseAnimation
              
             //yield return StartCoroutine(TestAllMotion());
             yield return StartCoroutine(GestureProcess(politeGreetingList));
-            StartCoroutine(GestureProcess(breathing_active));
+            //StartCoroutine(GestureProcess(breathing_active));
 
             //float[][] test_;
             //motionTable.TryGetValue("오른팔-상", out test_);

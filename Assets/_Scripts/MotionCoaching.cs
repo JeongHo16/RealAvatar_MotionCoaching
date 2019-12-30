@@ -82,16 +82,14 @@ public class MotionCoaching : MonoBehaviour
                     MovingNeck();
                 else
                 {
-                    float[] temp;
                     kinematics.ForwardKinematics();
-                    temp = kinematics.InverseKinematics(splitOutput[0][2], splitOutput[0][1]);
+                    tempDataFile[0] = kinematics.InverseKinematics(splitOutput[0][2], splitOutput[0][1]);
                     
-                    Debug.Log("-------------temp--------");
-                    for (int i = 0; i < temp.Length; i++)
-                        tempDataFile[0] = temp;
                 }
-                
                 motionDataFile = tempDataFile;
+                for (int i = 2; i < motionDataFile[0].Length; i++)
+                    motionDataFile[0][i] *= -1f;
+               
             }
             else if (keys.Contains("DEG"))
             {
@@ -102,6 +100,7 @@ public class MotionCoaching : MonoBehaviour
                 switch (degree)
                 {
                     case "0도":
+                    case "360도":
                     case "12시":
                         degree = "0도";
                         break;

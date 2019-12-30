@@ -73,10 +73,20 @@ public class Kinematics : MonoBehaviour
             CalculateInverse(end_lx, end_ly, end_lz, false);
             CalculateInverse(end_rx, end_ry, end_rz, true);
         }
-        afterAngles[7] = 0f;
-        afterAngles[8] = 0f;
+        afterAngles[7] = cdTransforms[6].transform.localRotation.eulerAngles.y;
+        LimitNeckAngle(ref afterAngles[7]);
+        afterAngles[8] = cdTransforms[7].transform.localRotation.eulerAngles.x;
+        LimitNeckAngle(ref afterAngles[8]);
         return afterAngles;
         
+    }
+
+    void LimitNeckAngle(ref float angle)
+    {
+        if (angle > 180f)
+            angle -= 360f;
+        else if (angle < -180f)
+            angle += 360f;
     }
 
     public void CalculateInverse(float end_x, float end_y, float end_z, bool right)
@@ -182,28 +192,28 @@ public class Kinematics : MonoBehaviour
         }
     }
 
-    IEnumerator MovingInverse(Transform transforms, int index)
-    {
-        float elapsedTime = 0f;
-        float duration = 0.3f;
-        Quaternion startQuat = transforms.localRotation;
+    //IEnumerator MovingInverse(Transform transforms, int index)
+    //{
+    //    float elapsedTime = 0f;
+    //    float duration = 0.3f;
+    //    Quaternion startQuat = transforms.localRotation;
 
-        Vector3 vec = Vector3.zero;
-        MakeVector(ref vec, afterAngles[index], index);
-        Quaternion targetQuat = Quaternion.Euler(vec);
+    //    Vector3 vec = Vector3.zero;
+    //    MakeVector(ref vec, afterAngles[index], index);
+    //    Quaternion targetQuat = Quaternion.Euler(vec);
 
-        while (elapsedTime <= duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float normalTime = elapsedTime / duration;
-            normalTime = float.IsInfinity(normalTime) ? 0f : normalTime;
-            Quaternion currentQuat = Quaternion.Lerp(startQuat, targetQuat, elapsedTime / duration);
-            transforms.localRotation = currentQuat;
+    //    while (elapsedTime <= duration)
+    //    {
+    //        elapsedTime += Time.deltaTime;
+    //        float normalTime = elapsedTime / duration;
+    //        normalTime = float.IsInfinity(normalTime) ? 0f : normalTime;
+    //        Quaternion currentQuat = Quaternion.Lerp(startQuat, targetQuat, elapsedTime / duration);
+    //        transforms.localRotation = currentQuat;
 
-            yield return null;
+    //        yield return null;
 
-        }
-    }
+    //    }
+    //}
         public void limitAngle(ref float[] new_angles, int index)
     {
         if (new_angles[index] > 90f)
