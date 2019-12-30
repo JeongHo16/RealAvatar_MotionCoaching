@@ -30,6 +30,7 @@ public class MotionCoaching : MonoBehaviour
     public static bool degBase = false;
 
     int facesave = 0;
+    Coroutine repeatCoroutine;
 
     char hyphen = '-';
     char slash = '/';
@@ -79,17 +80,17 @@ public class MotionCoaching : MonoBehaviour
             {
 
                 if (splitOutput[0][2] == "머리")
-                    MovingNeck();
+                    tempDataFile[0] = MovingNeck();
                 else
                 {
                     kinematics.ForwardKinematics();
                     tempDataFile[0] = kinematics.InverseKinematics(splitOutput[0][2], splitOutput[0][1]);
-                    
+
                 }
                 motionDataFile = tempDataFile;
                 for (int i = 2; i < motionDataFile[0].Length; i++)
                     motionDataFile[0][i] *= -1f;
-               
+
             }
             else if (keys.Contains("DEG"))
             {
@@ -212,7 +213,7 @@ public class MotionCoaching : MonoBehaviour
               
         }
 
-        if (canADV || StateUpdater.isCanInverse)
+        if (canADV && StateUpdater.isCanInverse && canMove)
         {
             if (keys.Contains("DUR"))
             {
@@ -379,7 +380,7 @@ public class MotionCoaching : MonoBehaviour
     {
         for (int i = 0; i < motionDataFile.Length; i++)
         {
-            if (motionDataFile[i][0] / 2f > 0.1f)
+            if (motionDataFile[i][0] / 2f >= 0.2f)
             {
                 motionDataFile[i][0] /= 2f;
                 continue;
@@ -519,29 +520,57 @@ public class MotionCoaching : MonoBehaviour
         }
     }
 
-    void MovingNeck()
+    float[] MovingNeck()
     {
-        for (int i = 0; i < 8; i++)
-            tempDataFile[0][i] = cdJoints[i].GetCurrentAngle;
+        float[] temp = new float[9];
+        temp[0] = 0.4f;
+        for (int i = 1; i < 9; i++)
+            temp[i] = cdJoints[i - 1].GetCurrentAngle;
 
-        switch(splitOutput[0][1])
+        switch (splitOutput[0][1])
         {
             case "상":
-                tempDataFile[0][7] -= 20f;
+                temp[8] -= 20f;
                 break;
             case "하":
-                tempDataFile[0][7] += 5f;
+                temp[8] += 5f;
+                Debug.Log(temp[8]);
                 break;
             case "좌":
-                tempDataFile[0][6] -= 20f;
+                temp[7] -= 20f;
                 break;
             case "우":
-                tempDataFile[0][6] += 20f; ;
+                temp[7] += 20f; ;
                 break;
         }
-        
-        CheckNeckAngle();
 
+        CheckNeckAngle(ref temp[7], 6);
+        CheckNeckAngle(ref temp[8], 7);
+        return temp;
+
+    }
+
+    void CheckNeckAngle(ref float angle, int index)
+    {
+        if (angle >= 180f)
+            angle -= 360f;
+        LimitNeckAngle(index, angle);
+
+    }
+
+    void LimitNeckAngle(int index, float angle)
+    {
+        switch (index)
+        {
+            case 6:
+                if (angle > 50 || angle < -50)
+                    canMove = false;
+                break;
+            case 7:
+                if (angle > 13 || angle < -60)
+                    canMove = false;
+                break;
+        }
     }
 
     void CheckNeckAngle()
@@ -555,20 +584,7 @@ public class MotionCoaching : MonoBehaviour
         
     }
 
-    void LimitNeckAngle(int index, float angle)
-    {
-        switch (index)
-        {
-            case 6:
-                if (angle > 50 || angle < -50)
-                    canMove = false;
-                break;
-            case 7:
-                if (angle > 13 || angle < -60)
-                    canMove = false;    
-                break;
-        }
-    }
+   
     string[][] SplitKeys(string key)
     {
         if(key.Contains("/"))
@@ -607,15 +623,21 @@ public class MotionCoaching : MonoBehaviour
 
     IEnumerator CountTime(float time)
     {
+        GetDurTime();
         float elapsedTime = 0.0f;
         while (elapsedTime < time)
         {
             elapsedTime += Time.deltaTime;
-
+            Debug.Log(elapsedTime);
             yield return Time.deltaTime;
         }
         if (coroutine_running)
+        {
+            StopCoroutine(repeatCoroutine);
+            coroutine_running = false;
             StopCoroutine(coroutine);
+        }
+
         StartCoroutine(robot.SetBasePos());
 
     }
@@ -623,7 +645,6 @@ public class MotionCoaching : MonoBehaviour
     void GetDurTime()
     {
         int index = 0;
-        float time = 0f;
         for (int i = 0; i < splitOutput.Length; i++)
         {
             if (splitOutput[i][0] == "DUR")
@@ -655,18 +676,22 @@ public class MotionCoaching : MonoBehaviour
     IEnumerator RepeatMotion()
     {
         float playTime = 0;
-        for (int i = 0; i < motionDataFile.Length - 1; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            playTime += motionDataFile[0][i];
+            playTime += motionDataFile[i][0];
         }
-
         while (true)
         {
+            yield return null;
+            repeatCoroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+            yield return new WaitForSeconds(playTime);
+            Debug.Log(playTime);
             coroutine_running = true;
-            StartCoroutine(robot.GestureProcess(motionDataFile));
-            yield return playTime;
         }
-        
+
+
+
+
     }
 
 
