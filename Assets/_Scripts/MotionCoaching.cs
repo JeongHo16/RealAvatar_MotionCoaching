@@ -30,6 +30,7 @@ public class MotionCoaching : MonoBehaviour
     public static bool degBase = false;
 
     int facesave = 0;
+    Coroutine repeatCoroutine;
 
     char hyphen = '-';
     char slash = '/';
@@ -521,22 +522,25 @@ public class MotionCoaching : MonoBehaviour
 
     void MovingNeck()
     {
-        for (int i = 0; i < 8; i++)
-            tempDataFile[0][i] = cdJoints[i].GetCurrentAngle;
+        float[] array = new float[9];
+        array[0] = 0.4f;
+        for (int i = 1; i < 9; i++)
+            array[i] = cdJoints[i-1].GetCurrentAngle;
+        tempDataFile[0] = array;
 
-        switch(splitOutput[0][1])
+        switch (splitOutput[0][1])
         {
             case "상":
-                tempDataFile[0][7] -= 20f;
+                tempDataFile[0][8] -= 20f;
                 break;
             case "하":
-                tempDataFile[0][7] += 5f;
+                tempDataFile[0][8] += 5f;
                 break;
             case "좌":
-                tempDataFile[0][6] -= 20f;
+                tempDataFile[0][7] -= 20f;
                 break;
             case "우":
-                tempDataFile[0][6] += 20f; ;
+                tempDataFile[0][7] += 20f; ;
                 break;
         }
         
@@ -607,15 +611,21 @@ public class MotionCoaching : MonoBehaviour
 
     IEnumerator CountTime(float time)
     {
+        GetDurTime();
         float elapsedTime = 0.0f;
         while (elapsedTime < time)
         {
             elapsedTime += Time.deltaTime;
-
+            Debug.Log(elapsedTime);
             yield return Time.deltaTime;
         }
         if (coroutine_running)
+        {
+            StopCoroutine(repeatCoroutine);
+            coroutine_running = false;
             StopCoroutine(coroutine);
+        }
+
         StartCoroutine(robot.SetBasePos());
 
     }
@@ -623,7 +633,6 @@ public class MotionCoaching : MonoBehaviour
     void GetDurTime()
     {
         int index = 0;
-        float time = 0f;
         for (int i = 0; i < splitOutput.Length; i++)
         {
             if (splitOutput[i][0] == "DUR")
@@ -655,18 +664,22 @@ public class MotionCoaching : MonoBehaviour
     IEnumerator RepeatMotion()
     {
         float playTime = 0;
-        for (int i = 0; i < motionDataFile.Length - 1; i++)
+        for (int i = 0; i < motionDataFile.Length; i++)
         {
-            playTime += motionDataFile[0][i];
+            playTime += motionDataFile[i][0];
         }
-
         while (true)
         {
+            yield return null;
+            repeatCoroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+            yield return new WaitForSeconds(playTime);
+            Debug.Log(playTime);
             coroutine_running = true;
-            StartCoroutine(robot.GestureProcess(motionDataFile));
-            yield return playTime;
         }
-        
+
+
+
+
     }
 
 
