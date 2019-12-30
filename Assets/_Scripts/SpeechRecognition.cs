@@ -11,6 +11,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
     public Sprite[] micImages;
     public Image mic;
     public InputField inputField;
+    public Text Speechinput;
     public static bool receive = false;
     public static AI_MESSAGE output;
 
@@ -95,7 +96,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
             string jsonString = JsonUtility.ToJson(request, prettyPrint: false);
             Debug.Log("[Coaching]" + jsonString);
             YesNoClient.Instance.Write(jsonString);
-
+            Speechinput.text = _result;
             _result = "";
         }
         else
@@ -109,6 +110,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
                 AI_MESSAGE response = JsonUtility.FromJson<AI_MESSAGE>(coaching_result);
                 output = response;
                 Debug.Log("[Coaching] Result: " + response.result);
+                
             }
             
         }
