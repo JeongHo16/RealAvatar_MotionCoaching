@@ -63,7 +63,6 @@ public class Kinematics : MonoBehaviour
     public float[] InverseKinematics(string part, string dir)
     {
         moccaPart = part;
-        Debug.Log(moccaPart);
         direction = dir;
         if (part == "왼팔")
             CalculateInverse(end_lx, end_ly, end_lz, false);
@@ -76,8 +75,6 @@ public class Kinematics : MonoBehaviour
         }
         afterAngles[7] = 0f;
         afterAngles[8] = 0f;
-        for (int i = 0; i < afterAngles.Length; i++)
-            Debug.Log(afterAngles[i]);
         return afterAngles;
         
     }
