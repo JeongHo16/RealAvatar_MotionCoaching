@@ -254,20 +254,23 @@ public class MotionCoaching : MonoBehaviour
 
             }
 
-            switch (splitOutput[index][1])
+            if (!((keys.Contains("DYN") || keys.Contains("DEG")) && (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")))
             {
-                case "속도강":
-                    MotionSpeedUp();
-                    break;
-                case "속도약":
-                    MotionSpeedDown();
-                    break;
-                case "각도강":
-                    MotionExpansion(parts);
-                    break;
-                case "각도약":
-                    MotionReduction(parts);
-                    break;
+                switch (splitOutput[index][1])
+                {
+                    case "속도강":
+                        MotionSpeedUp();
+                        break;
+                    case "속도약":
+                        MotionSpeedDown();
+                        break;
+                    case "각도강":
+                        MotionExpansion(parts);
+                        break;
+                    case "각도약":
+                        MotionReduction(parts);
+                        break;
+                }
             }
 
 
