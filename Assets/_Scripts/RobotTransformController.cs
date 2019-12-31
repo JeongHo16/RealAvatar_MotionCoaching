@@ -765,6 +765,34 @@ namespace REEL.PoseAnimation
             new float[9] { 0.7f,       45f, -45f, -45f,    -45f, 45f, 45f,     30f, 0f    },
         };
 
+        float[][] arms_12List =
+        {
+            new float[9] { 0.7f,        0f, -90f, 0f,     0f, 90f, 0f,        0f, 0f },
+        };
+        float[][] arms_1List =
+        {
+            new float[9] { 0.7f,        0f, -90f, -30f,     0f, 60f, 0f,        0f, 0f },
+        };
+        float[][] arms_2List =
+        {
+            new float[9] { 0.7f,        0f, -90f, -60f,     0f, 30f, 0f,        0f, 0f },
+        };
+        float[][] arms_3List =
+        {
+            new float[9] { 0.7f,        0f, -90f, -90f,     0f, 30f, 0f,        0f, 0f },
+        };
+        float[][] arms_9List =
+        {
+            new float[9] { 0.7f,        0f, 0f, 0f,     0f, 90f, 90f,        0f, 0f },
+        };
+        float[][] arms_10List =
+        {
+            new float[9] { 0.7f,        0f, -30f, 0f,     0f, 90f, 60f,        0f, 0f },
+        };
+        float[][] arms_11List =
+        {
+            new float[9] { 0.7f,        0f, -60f, 0f,     0f, 90f, 30f,        0f, 0f },
+        };
 
 
 
@@ -1047,6 +1075,14 @@ namespace REEL.PoseAnimation
             motionTable.Add("머리고개얼굴목-DEG--30도", head_11List);
             motionTable.Add("머리고개얼굴목-DEG--60도", head_10List);
             motionTable.Add("머리고개얼굴목-DEG--90도", head_9List);
+
+            motionTable.Add("팔양팔두팔양쪽팔-DEG-0도", arms_12List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG-30도", arms_1List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG-60도", arms_2List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG-90도", arms_3List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG--30도", arms_11List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG--60도", arms_10List);
+            motionTable.Add("팔양팔두팔양쪽팔-DEG--90도", arms_9List);
 
 
         }

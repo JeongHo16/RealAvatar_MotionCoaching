@@ -137,12 +137,33 @@ public class MotionCoaching : MonoBehaviour
                         degree = "-90도";
                         break;
                     default:
-                        popUpMessege.MessegePopUp("할 수 없는 각도에요");
+                        popUpMessege.MessegePopUp("할 수 없는 각도예요");
                         degree = "x";
                         motionDataFile = robot.baseList;
                         break;
 
                 }
+                if (parts == "전신")
+                {
+                    switch (degree)
+                    {
+                        case "0도":
+                        case "30도":
+                        case "60도":
+                        case "90도":
+                            parts = "오른팔";
+                            break;
+
+                        case "-30도":
+                        case "-60도":
+                        case "-90도":
+                            parts = "왼팔";
+                            break;
+                    }
+                }
+
+                else if (parts == "얼굴표정")
+                    parts = "머리고개얼굴목";
                 string ctrldeg = parts + "-DEG-" + degree;
                 if(!degree.Equals("x"))
                     motionDataFile = CopyFloatArray(ctrldeg);
@@ -179,10 +200,7 @@ public class MotionCoaching : MonoBehaviour
                         {
                             if (splitOutput[0][0] == motionOnly[i])
                             {
-                                if (keys.Contains("ADV") && keys.Contains("전신"))
-                                    whole = "전신";
-                                else
-                                    whole = motionOnly[i];
+
                                 facesave = 0;
                                 motionDataFile = CopyFloatArray(sendKey);
                             }
@@ -208,29 +226,33 @@ public class MotionCoaching : MonoBehaviour
             int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
             if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
             {
-                if (whole == "왼팔")
-                {
-                    for (int i = 0; i < 3; i++)
-                        parts[i] = 1;
-                }
-                else if (whole == "오른팔")
-                    for (int i = 3; i < 6; i++)
-                        parts[i] = 1;
-                else if (whole == "머리고개얼굴목")
-                    for (int i = 6; i < 8; i++)
-                        parts[i] = 1;
-                else if (whole == "팔양팔두팔양쪽팔")
-                    for (int i = 0; i < 6; i++)
-                        parts[i] = 1;
-                else
+                if (whole == "전신")
                 {
                     for (int i = 0; i < 8; i++)
                         parts[i] = 1;
                 }
+                else
+                {
+                    switch (splitOutput[index][2])
+                    {
+                        case "왼팔":
+                            for (int i = 0; i < 3; i++)
+                                parts[i] = 1;
+                            break;
+                        case "오른팔":
+                            for (int i = 3; i < 6; i++)
+                                parts[i] = 1;
+                            break;
+                        case "머리":
+                            for (int i = 6; i < 8; i++)
+                                parts[i] = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
             }
-
-
 
             switch (splitOutput[index][1])
             {
@@ -247,8 +269,9 @@ public class MotionCoaching : MonoBehaviour
                     MotionReduction(parts);
                     break;
             }
-        }
 
+
+        }
 
         if (canADV && StateUpdater.isCanInverse && canMove)
         {
