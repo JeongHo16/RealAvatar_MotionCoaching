@@ -23,6 +23,7 @@ public class MotionCoaching : MonoBehaviour
     string[][] splitOutput;
     float[][] tempDataFile = new float[1][];
     float time;
+    string whole;
     bool coroutine_running = false;
     bool canADV = true;
     bool canMove = true;
@@ -168,6 +169,7 @@ public class MotionCoaching : MonoBehaviour
                         break;
 
                     case "전신":
+                        whole = "전신";
                         wholeBody(sendKey);
                         break;
 
@@ -199,6 +201,37 @@ public class MotionCoaching : MonoBehaviour
                 }
             }
 
+            int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
+            {
+                if (whole == "전신")
+                {
+                    for (int i = 0; i < 8; i++)
+                        parts[i] = 1;
+                }
+                else
+                {
+                    switch (splitOutput[index][2])
+                    {
+                        case "왼팔":
+                            for (int i = 0; i < 3; i++)
+                                parts[i] = 1;
+                            break;
+                        case "오른팔":
+                            for (int i = 3; i < 6; i++)
+                                parts[i] = 1;
+                            break;
+                        case "머리":
+                            for (int i = 6; i < 8; i++)
+                                parts[i] = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            }
+
             switch (splitOutput[index][1])
             {
                 case "속도강":
@@ -208,10 +241,10 @@ public class MotionCoaching : MonoBehaviour
                     MotionSpeedDown();
                     break;
                 case "각도강":
-                    MotionExpansion();
+                    MotionExpansion(parts);
                     break;
                 case "각도약":
-                    MotionReduction();
+                    MotionReduction(parts);
                     break;
             }
 
@@ -412,29 +445,37 @@ public class MotionCoaching : MonoBehaviour
 
     }
 
-    void MotionExpansion()
+    void MotionExpansion(int[] parts)
     {
 
         for (int i = 0; i < motionDataFile.Length; i++)
         {
             for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                motionDataFile[i][j] = motionDataFile[i][j] * 1.3f;
-                limitMinMax(i, j);
+                if(parts[j-1] == 1)
+                {
+                    motionDataFile[i][j] = motionDataFile[i][j] * 1.3f;
+                    limitMinMax(i, j);
+                }
+                
             }
 
         }
     }
 
-    void MotionReduction()
+    void MotionReduction(int[] parts)
     {
 
         for (int i = 0; i < motionDataFile.Length; i++)
         {
             for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                motionDataFile[i][j] = motionDataFile[i][j] * 0.7f;
-                limitMinMax(i, j);
+                if(parts[j-1] ==1)
+                {
+                    motionDataFile[i][j] = motionDataFile[i][j] * 0.7f;
+                    limitMinMax(i, j);
+                }
+                
 
             }
 
@@ -598,6 +639,8 @@ public class MotionCoaching : MonoBehaviour
     {
         if (key.Contains("/"))
         {
+            if (!key.Contains("전신"))
+                whole = null;
             string[] splitOutput_slash = key.Split(slash);
             string[][] result = new string[splitOutput_slash.Length][];
             for (int i = 0; i < splitOutput_slash.Length; i++)
