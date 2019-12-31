@@ -139,6 +139,7 @@ public class MotionCoaching : MonoBehaviour
                     default:
                         popUpMessege.MessegePopUp("할 수 없는 각도에요");
                         degree = "x";
+                        motionDataFile = robot.baseList;
                         break;
 
                 }
@@ -523,51 +524,55 @@ public class MotionCoaching : MonoBehaviour
 
     public void switchFaceAni(int i)
     {
-        switch (i)
+        if(motionDataFile != robot.baseList)
         {
-            case 0:
-                face.normal = true;
-                break;
-            case 1:
-                face.happy = true;
-                break;
-            case 2:
-                face.angry = true;
-                break;
-            case 3:
-                face.fear = true;
-                break;
-            case 4:
-                face.sad = true;
-                break;
-            case 5:
-                face.smile = true;
-                break;
-            case 6:
-                face.surprised = true;
-                break;
-            case 7:
-                face.speak = true;
-                break;
-            case 8:
-                face.winkleft = true;
-                break;
-            case 9:
-                face.winkright = true;
-                break;
-            case 10:
-                face.gazeup = true;
-                break;
-            case 11:
-                face.gazedown = true;
-                break;
-            case 12:
-                face.gazeleft = true;
-                break;
-            case 13:
-                face.gazeright = true;
-                break;
+            switch (i)
+            {
+                case 0:
+                    face.normal = true;
+                    break;
+                case 1:
+                    face.happy = true;
+                    break;
+                case 2:
+                    face.angry = true;
+                    break;
+                case 3:
+                    face.fear = true;
+                    break;
+                case 4:
+                    face.sad = true;
+                    break;
+                case 5:
+                    face.smile = true;
+                    break;
+                case 6:
+                    face.surprised = true;
+                    break;
+                case 7:
+                    face.speak = true;
+                    break;
+                case 8:
+                    face.winkleft = true;
+                    break;
+                case 9:
+                    face.winkright = true;
+                    break;
+                case 10:
+                    face.gazeup = true;
+                    break;
+                case 11:
+                    face.gazedown = true;
+                    break;
+                case 12:
+                    face.gazeleft = true;
+                    break;
+                case 13:
+                    face.gazeright = true;
+                    break;
+            }
         }
+        
     }
 
     float[] MovingNeck()
@@ -729,6 +734,7 @@ public class MotionCoaching : MonoBehaviour
             default:
                 popUpMessege.MessegePopUp("너무 길어요");
                 time = 0f;
+                motionDataFile = robot.baseList;
                 break;
         }
     }

@@ -11,6 +11,7 @@ namespace REEL.PoseAnimation
         public MoccaFaceAnniTest face;
         public JointSet[] jointInfo;
         public bool breath = false;
+        
 
         public string currentGesture;
 
@@ -36,6 +37,8 @@ namespace REEL.PoseAnimation
         //         new float[9] {  0.7f,        45, -45, -45,       -60, 80, 34,         0, 20     },
         //         new float[9] {  1.5f,        45, -45, -45,       45, 45, 45,        0, 20    }
         //     };
+        public float[][] baseList = { new float[9] { 0.8f, 45f, -45f, -45f, -45f, 45f, 45f, 0f, 0f }, };
+
         float[][] helloList = {
                      // Time,   Left Arm,          Right Arm,          Head
             new float[9] {  1.5f,       -60f, -60f, -38f,   60f, 60f, 38f,      0f, 20f   },
@@ -1062,6 +1065,7 @@ namespace REEL.PoseAnimation
 
         public IEnumerator GestureProcess(float[][] motionInfo)
         {
+            
             isPlaying = true;
 
             for (int ix = 0; ix < motionInfo.Length; ++ix)
