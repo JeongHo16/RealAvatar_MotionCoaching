@@ -223,14 +223,17 @@ public class MotionCoaching : MonoBehaviour
             if (keys.Contains("DUR"))
             {
                 GetDurTime();
-                if (motionDataFile.Length == 1)
+                if (time != 0f)
                 {
-                    StartCoroutine("PlayAndWait");
-                }
-                else
-                {
-                    coroutine = StartCoroutine(RepeatMotion());
-                    StartCoroutine(CountTime(time));
+                    if (motionDataFile.Length == 1)
+                    {
+                        StartCoroutine("PlayAndWait");
+                    }
+                    else
+                    {
+                        coroutine = StartCoroutine(RepeatMotion());
+                        StartCoroutine(CountTime(time));
+                    }
                 }
             }
             else
@@ -629,7 +632,6 @@ public class MotionCoaching : MonoBehaviour
 
     IEnumerator CountTime(float time)
     {
-        GetDurTime();
         float elapsedTime = 0.0f;
         while (elapsedTime < time)
         {
@@ -665,16 +667,25 @@ public class MotionCoaching : MonoBehaviour
         {
             timestr += dur_time[i];
         }
-        time = float.Parse(timestr);
+        
         switch (dur_time[dur_time.Length - 1])
         {
             case '초':
+                time = float.Parse(timestr);
                 break;
             case '분':
-                time *= 60f;
+                time = float.Parse(timestr)*60f;
                 break;
-            case '시':
-                time *= 3600f;
+            //case '간':
+            //    if (dur_time[dur_time.Length - 2].Equals('시'))
+            //    {
+            //        popUpMessege.MessegePopUp("너무 길어요");
+            //        time = 0f;
+            //    }
+            //    break;
+            default:
+                popUpMessege.MessegePopUp("너무 길어요");
+                time = 0f;
                 break;
         }
     }
