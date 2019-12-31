@@ -179,7 +179,10 @@ public class MotionCoaching : MonoBehaviour
                         {
                             if (splitOutput[0][0] == motionOnly[i])
                             {
-
+                                if (keys.Contains("ADV") && keys.Contains("전신"))
+                                    whole = "전신";
+                                else
+                                    whole = motionOnly[i];
                                 facesave = 0;
                                 motionDataFile = CopyFloatArray(sendKey);
                             }
@@ -205,33 +208,29 @@ public class MotionCoaching : MonoBehaviour
             int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
             if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
             {
-                if (whole == "전신")
+                if (whole == "왼팔")
+                {
+                    for (int i = 0; i < 3; i++)
+                        parts[i] = 1;
+                }
+                else if (whole == "오른팔")
+                    for (int i = 3; i < 6; i++)
+                        parts[i] = 1;
+                else if (whole == "머리고개얼굴목")
+                    for (int i = 6; i < 8; i++)
+                        parts[i] = 1;
+                else if (whole == "팔양팔두팔양쪽팔")
+                    for (int i = 0; i < 6; i++)
+                        parts[i] = 1;
+                else
                 {
                     for (int i = 0; i < 8; i++)
                         parts[i] = 1;
                 }
-                else
-                {
-                    switch (splitOutput[index][2])
-                    {
-                        case "왼팔":
-                            for (int i = 0; i < 3; i++)
-                                parts[i] = 1;
-                            break;
-                        case "오른팔":
-                            for (int i = 3; i < 6; i++)
-                                parts[i] = 1;
-                            break;
-                        case "머리":
-                            for (int i = 6; i < 8; i++)
-                                parts[i] = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                }
 
             }
+
+
 
             switch (splitOutput[index][1])
             {
@@ -248,9 +247,8 @@ public class MotionCoaching : MonoBehaviour
                     MotionReduction(parts);
                     break;
             }
-
-
         }
+
 
         if (canADV && StateUpdater.isCanInverse && canMove)
         {
