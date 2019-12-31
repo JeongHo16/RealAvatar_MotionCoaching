@@ -171,7 +171,7 @@ public class MotionCoaching : MonoBehaviour
                         {
                             if (splitOutput[0][0] == motionOnly[i])
                             {
-                                
+
                                 facesave = 0;
                                 motionDataFile = CopyFloatArray(sendKey);
                             }
@@ -194,7 +194,7 @@ public class MotionCoaching : MonoBehaviour
                 }
             }
 
-            switch(splitOutput[index][1])
+            switch (splitOutput[index][1])
             {
                 case "속도강":
                     MotionSpeedUp();
@@ -209,8 +209,8 @@ public class MotionCoaching : MonoBehaviour
                     MotionReduction();
                     break;
             }
-            
-              
+
+
         }
 
         if (canADV && StateUpdater.isCanInverse && canMove)
@@ -233,10 +233,10 @@ public class MotionCoaching : MonoBehaviour
                 switchFaceAni(facesave);
                 if (!onlyFace)
                 {
-                    coroutine=StartCoroutine(robot.GestureProcess(motionDataFile));
+                    coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
                 }
                 onlyFace = false;
-                
+
             }
         }
 
@@ -245,15 +245,16 @@ public class MotionCoaching : MonoBehaviour
             popUpMessege.MessegePopUp("더 이상 빨라질 수 없어요");
             canADV = true;
         }
-            
-       
-        
+
+
+
 
 
     }
 
     IEnumerator PlayAndWait()
     {
+        switchFaceAni(facesave);
         yield return StartCoroutine(robot.GestureProcess(motionDataFile));
         StartCoroutine(CountTime(time));
     }
@@ -262,10 +263,10 @@ public class MotionCoaching : MonoBehaviour
     {
         float[][] value = robot.keyMotionTable(key);
         float[][] newArray = new float[value.Length][];
-        for(int i = 0; i < value.Length; i++)
+        for (int i = 0; i < value.Length; i++)
         {
             float[] val = new float[value[i].Length];
-            for(int j = 0; j < value[i].Length; j++)
+            for (int j = 0; j < value[i].Length; j++)
             {
                 val[j] = value[i][j];
             }
@@ -400,7 +401,7 @@ public class MotionCoaching : MonoBehaviour
         {
             motionDataFile[i][0] *= 2f;
         }
-        
+
     }
 
     void MotionExpansion()
@@ -575,19 +576,19 @@ public class MotionCoaching : MonoBehaviour
 
     void CheckNeckAngle()
     {
-        for(int i=6; i<8; i++)
+        for (int i = 6; i < 8; i++)
         {
             if (tempDataFile[0][i] >= 180f)
                 tempDataFile[0][i] -= 360f;
             LimitNeckAngle(i, tempDataFile[0][i]);
         }
-        
+
     }
 
-   
+
     string[][] SplitKeys(string key)
     {
-        if(key.Contains("/"))
+        if (key.Contains("/"))
         {
             string[] splitOutput_slash = key.Split(slash);
             string[][] result = new string[splitOutput_slash.Length][];
@@ -603,7 +604,7 @@ public class MotionCoaching : MonoBehaviour
             result[0] = key.Split(hyphen);
             return result;
         }
-        
+
     }
 
     void basicPlay(float[][] motionDataFile)
@@ -628,14 +629,13 @@ public class MotionCoaching : MonoBehaviour
         while (elapsedTime < time)
         {
             elapsedTime += Time.deltaTime;
-            Debug.Log(elapsedTime);
             yield return Time.deltaTime;
         }
         if (coroutine_running)
         {
-            StopCoroutine(repeatCoroutine);
+            StopAllCoroutines();
             coroutine_running = false;
-            StopCoroutine(coroutine);
+            face.Clear();
         }
 
         StartCoroutine(robot.SetBasePos());
@@ -675,6 +675,7 @@ public class MotionCoaching : MonoBehaviour
 
     IEnumerator RepeatMotion()
     {
+        switchFaceAni(facesave);
         float playTime = 0;
         for (int i = 0; i < motionDataFile.Length; i++)
         {
@@ -682,21 +683,14 @@ public class MotionCoaching : MonoBehaviour
         }
         while (true)
         {
-            yield return null;
-            repeatCoroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
-            yield return new WaitForSeconds(playTime);
-            Debug.Log(playTime);
             coroutine_running = true;
+            yield return StartCoroutine(robot.GestureProcess(motionDataFile));
         }
-
-
-
 
     }
 
 
 
 }
-
 
 
