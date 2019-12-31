@@ -13,6 +13,7 @@ public class MotionCoaching : MonoBehaviour
     public Text resultText;
 
     public static float[][] motionDataFile;
+    public static bool repeat = false;
 
     [SerializeField]
     public CDJointOrientationSetter cdJointOrientationSetter;
@@ -30,7 +31,6 @@ public class MotionCoaching : MonoBehaviour
     public static bool degBase = false;
 
     int facesave = 0;
-    Coroutine repeatCoroutine;
 
     char hyphen = '-';
     char slash = '/';
@@ -635,6 +635,7 @@ public class MotionCoaching : MonoBehaviour
         {
             StopAllCoroutines();
             coroutine_running = false;
+            repeat = false;
             face.Clear();
         }
 
@@ -685,6 +686,7 @@ public class MotionCoaching : MonoBehaviour
         {
             coroutine_running = true;
             yield return StartCoroutine(robot.GestureProcess(motionDataFile));
+            repeat = true;
         }
 
     }

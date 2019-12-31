@@ -83,7 +83,7 @@ namespace REEL.PoseAnimation
         {
             new float[9] {  1.1f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
             new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
-            new float[9] {  0.9f,       -20, -45, -45,    -60, 45, 45,         0, 10  },\
+            new float[9] {  0.9f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
             new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
 
         };
@@ -1069,9 +1069,8 @@ namespace REEL.PoseAnimation
                 // 첫 번째를 제외한 나머지 각도 설정인 경우, 각도 데이터에 있는 시간 값 사용.
                 float rotDuration = motionInfo[ix][0];
                 //Debug.Log(motionInfo[ix][8]);
-
                 // 첫 번째 각도 설정인 경우, 최대 회전 각도를 기반으로 회전 시간 계산.
-                if (ix == 0 && motionInfo.Length != 1)
+                if (ix == 0 && motionInfo.Length != 1 && MotionCoaching.repeat == false)
                 {
                     float maxDegree = GetDurationToFirstAngle(motionInfo[0]);
                     rotDuration = maxDegree / (rotSpeed * rotSpeedPercentage);
