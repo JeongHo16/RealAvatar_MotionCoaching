@@ -135,10 +135,15 @@ public class MotionCoaching : MonoBehaviour
                     case "9시":
                         degree = "-90도";
                         break;
+                    default:
+                        popUpMessege.MessegePopUp("할 수 없는 각도에요");
+                        degree = "x";
+                        break;
 
                 }
                 string ctrldeg = parts + "-DEG-" + degree;
-                motionDataFile = CopyFloatArray(ctrldeg);
+                if(!degree.Equals("x"))
+                    motionDataFile = CopyFloatArray(ctrldeg);
             }
             else
             {
@@ -636,9 +641,9 @@ public class MotionCoaching : MonoBehaviour
             StopAllCoroutines();
             coroutine_running = false;
             repeat = false;
-            face.Clear();
+            
         }
-
+        face.Clear();
         StartCoroutine(robot.SetBasePos());
 
     }
