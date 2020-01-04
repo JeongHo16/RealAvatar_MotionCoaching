@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace REEL.PoseAnimation
 {
@@ -11,8 +12,8 @@ namespace REEL.PoseAnimation
         public MoccaFaceAnniTest face;
         public JointSet[] jointInfo;
         public bool breath = false;
-        
-
+        public InputField keyInput;
+        public int cnt = 0;
         public string currentGesture;
 
         string _gesture;
@@ -42,24 +43,24 @@ namespace REEL.PoseAnimation
         float[][] helloList = {
                      // Time,   Left Arm,          Right Arm,          Head
             new float[9] {  1.5f,       -60f, -60f, -38f,   60f, 60f, 38f,      0f, 20f   },
-            new float[9] {  0.7f,       -60f, -80f, -34f,   60f, 80f, 34f,      0f, 20f   },
-            new float[9] {  0.7f,       -60f, -60f, -38f,   60f, 60f, 38f,      0f, 20f   },
-            new float[9] {  0.7f,       -60f, -80f, -34f,   60f, 80f, 34f,      0f, 20f   },
+            new float[9] {  0.7f,       -40f, -80f, -34f,   40f, 80f, 34f,      0f, 20f   },
+            new float[9] {  0.7f,       -40f, -60f, -38f,   40f, 60f, 38f,      0f, 20f   },
+            new float[9] {  0.7f,       -40f, -80f, -34f,   40f, 80f, 34f,      0f, 20f   },
 
         };
         float[][] angryList = {
                      // Time,   Left Arm,           Right Arm,         Head
              new float[9] {  0.8f,        -20, -70, -24,      20, 70, 24,         0, -2      },
-            new float[9] {  0.8f,        45, -70, -24,       -45, 70, 24,        0, -2      },
+            new float[9] {  0.8f,        40, -60, -24,       -40, 60, 24,        0, -2      },
             new float[9] {  0.8f,        -20, -70, -24,      20, 70, 24,         0, -2      },
 
         };
         float[][] sadList = {
                          // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  1.2f,       -24, -80, -67,      42, 80, 67,         0, 5   },
-            new float[9] {  0.5f,       -42, -80, -67,      24, 80, 67,         0, 5   },
-            new float[9] {  0.5f,       -24, -80, -67,      42, 80, 67,         0, 5   },
-            new float[9] {  0.5f,       -42, -80, -67,      24, 80, 67,         0, 5   },
+            new float[9] {  1.2f,       -24, -70, -55,      42, 70, 55,         0, 5   },
+            new float[9] {  0.5f,       -42, -70, -55,      24, 70, 55,         0, 5   },
+            new float[9] {  0.5f,       -24, -70, -55,      42, 70, 55,         0, 5   },
+            new float[9] {  0.5f,       -42, -70, -55,      24, 70, 55,         0, 5   },
 
         };
 
@@ -84,72 +85,72 @@ namespace REEL.PoseAnimation
 
         float[][] wrongList =
         {
-            new float[9] {  1.1f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
-            new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
-            new float[9] {  0.9f,       -20, -45, -45,    -60, 45, 45,         0, 10  },
-            new float[9] {  0.9f,        60, -45, -45,     20, 45, 45,         0, 10  },
+            new float[9] {  1.1f,       -20, -45, -45,    -50, 35, 40,         0, 10  },
+            new float[9] {  0.9f,        50, -35, -40,     20, 45, 45,         0, 10  },
+            new float[9] {  0.9f,       -20, -45, -45,    -50, 35, 40,         0, 10  },
+            new float[9] {  0.9f,        50, -35, -40,     20, 45, 45,         0, 10  },
 
         };
 
         float[][] happyList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  1.6f,       -30, -95, -57,      30, 95, 57,          0, -15 },
-            new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,         -14, -2 },
-            new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,          0, -15 },
-            new float[9] {  0.8f,       -30, -95, -57,      30, 95, 57,         -14, -2 },
+            new float[9] {  1.6f,       -25, -75, -45,      25, 75, 45,          0, -10 },
+            new float[9] {  0.8f,       -25, -75, -45,      25, 75, 45,         -14, -2 },
+            new float[9] {  0.8f,       -25, -75, -45,      25, 75, 45,          0, -10 },
+            new float[9] {  0.8f,       -25, -75, -45,      25, 75, 45,         -14, -2 },
 
         };
         float[][] refuseList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.9f,       64, -41, -16,       -64, 41, 16,         25, -13   },
-            new float[9] {  0.9f,       48, -53, -50,       -52, 48, 50,        -25, -13   },
+            new float[9] {  0.9f,       55, -38, -15,       -55, 38, 15,         25, -13   },
+            new float[9] {  0.9f,       50, -35, -40,       -50, 35, 40,        -25, -13   },
 
         };
         float[][] smileList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
-         new float[9] {  1.5f,       -31,-94,-40,        31,94,40,           0,-10   },
-            new float[9] {  0.5f,       -28,-101,-62,       28,101,62,          0,-10   },
-            new float[9] {  0.5f,       -31,-94,-40,        31,94,40,           0,-10   },
-            new float[9] {  0.5f,       -28,-101,-62,       28,101,62,          0,-10   },
+            new float[9] {  1.5f,       -31,-85,-25,        31,85,25,           0,-7   },
+            new float[9] {  0.5f,       -28,-89,-30,       28,89,30,          0,-9   },
+            new float[9] {  0.5f,       -31,-85,-25,        31,85,25,           0,-7   },
+            new float[9] {  0.5f,       -28,-89,-30,       28,89,30,          0,-9   },
 
         };
         float[][] takenabackList = new float[2][] {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.7f,        32, -28, -5,       -32, 23, 5,         0,-25    },
-            new float[9] {  1.2f,        32, -28, -5,       -32, 23, 5,         0,-25   },
+            new float[9] {  0.7f,        32, -28, -5,       -32, 23, 5,         0,-18   },
+            new float[9] {  1.2f,        32, -28, -5,       -32, 23, 5,         0,-18   },
 
         };
         float[][] tellList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.9f,       4,-59,-50,          -4,59,50 ,           0,-12      },
-            new float[9] {  0.5f,       4,-77,-70,          -4,77,70,            0,-12      },
+            new float[9] {  0.9f,       4,-58,-50,          -4,58,50 ,           0,-12      },
+            new float[9] {  0.5f,       4,-60,-60,          -4,60,60,            0,-12      },
             new float[9] {  0.5f,       4,-58,-50,          -4,58,50,            0,-12      },
-            new float[9] {  0.5f,       4,-77,-70,          -4,77,70,            0,-12      },
+            new float[9] {  0.5f,       4,-60,-60,          -4,60,60,            0,-12      },
 
         };
         float[][] sleepyList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.4f,       50,-71,-11,         -50,71,11,           0,-20      },
-            new float[9] {  1.4f,       50,-71,-11,         -50,71,11,           0,20       },
-            new float[9] {  0.4f,       50,-71,-11,         -50,71,11,           0,-20      },
-            new float[9] {  1.4f,       50,-71,-11,         -50,71,11,           0,20       },
+            new float[9] {  0.4f,       40,-55,-15,         -40,55,15,           0,-18      },
+            new float[9] {  1.4f,       40,-55,-15,         -40,55, 15,           0,18       },
+            new float[9] {  0.4f,       40,-55,-15,         -40,55, 15,           0,-18      },
+            new float[9] {  1.4f,       40,-55,-15,         -40,55, 15,           0,18      },
 
         };
         float[][] thinkingList = new float[5][] {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  1.5f,       40.5f,-82,-16,         30,85,60,           -17,-13     },
-            new float[9] {  0.8f,       40.5f, -82,-16,         30,85, 60,          -29,8       },
-            new float[9] {  0.8f,       40.5f, -82,-16,         30,85,60 ,           1,17       },
-            new float[9] {  0.8f,       40.5f, -82,-16,         30,85,60   ,        -10,-16     },
-            new float[9] {  0.8f,       40.5f, -82,-16,         15,85,60   ,         1,-2       },
+            new float[9] {  1.5f,       40.5f,-60,-16,         30,75,50,           -17,-13     },
+            new float[9] {  0.8f,       40.5f, -60,-16,         30,75, 50,          -29,8       },
+            new float[9] {  0.8f,       40.5f, -60,-16,         30,75,50 ,           1,17       },
+            new float[9] {  0.8f,       40.5f, -60,-16,         30,75,50   ,        -10,-16     },
+            new float[9] {  0.8f,       40.5f, -60,-16,         15,75,50   ,         1,-2       },
 
         };
         float[][] excellentList = new float[4][] {
                             // Time,    Left Arm,           Right Arm,          Head
             new float[9] {  1.2f,       -68, -29, -17,        68, 29, 17,      0, 5 },
-            new float[9] {  0.9f,       -60, -78, -27,        60, 78, 27,      0, 5 },
+            new float[9] {  0.9f,       -55, -65, -27,        55, 65, 27,      0, 5 },
             new float[9] {  0.9f,       -68, -29, -17,        68, 29, 17,      0, 5 },
-            new float[9] {  0.9f,       -60, -78, -27,        60, 78, 27,      0, 5 },
+            new float[9] {  0.9f,       -55, -65, -27,        55, 65, 27,      0, 5 },
 
         };
         float[][] shakeList = {
@@ -167,8 +168,8 @@ namespace REEL.PoseAnimation
         };
         float[][] hugList = new float[2][] {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.5f,       20, -74, -50,         -20, 74, 50 ,     0,20},
-            new float[9] {  1.1f,       20, -74, -50,         -20, 74, 50 ,     0,20},
+            new float[9] {  0.5f,       20, -65, -40,         -20, 65, 40 ,     0,20},
+            new float[9] {  1.1f,       20, -65, -40,         -20, 65, 40 ,     0,20},
 
         };
         float[][] fearList = new float[4][] {
@@ -181,20 +182,20 @@ namespace REEL.PoseAnimation
         };
         float[][] bowList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.5f,       60, -41, -67,       -62, 42, 73,         0, -19 },
+            new float[9] {  0.5f,       65, -25, -55,       -65, 25, 55,         0, -19 },
 
         };
         float[][] attentionList = {
                             // Time,    Left Arm,           Right Arm,          Head
-         new float[9] {  0.5f,       45, -77, -28,       -45, 77, 28,         0, 0 },
+         new float[9] {  0.5f,       50, -45, -15,       -50, 45, 15,         0, 5 },
 
         };
         float[][] bestList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  0.9f,       12,-72,-57,         12,72,57,           0,10  },
-            new float[9] {  0.5f,       -12,-72,-57,        -12,72,57,          0,10},
-            new float[9] {  0.5f,       12,-72,-57,         12,72,57,           0,20   },
-            new float[9] {  0.5f,       -12,-72,-57,        -12,72,57,          0,10},
+            new float[9] {  0.9f,       12,-65,-57,         12,72,57,           0,10  },
+            new float[9] {  0.5f,       -12,-72,-57,        -12,65,57,          0,10},
+            new float[9] {  0.5f,       12,-65,-57,         12,72,57,           0,20   },
+            new float[9] {  0.5f,       -12,-72,-57,        -12,65,57,          0,10},
 
         };
         float[][] leftNeckList = {
@@ -487,39 +488,39 @@ namespace REEL.PoseAnimation
         };
 
         float[][] hurrayList = {
-            new float[9] { 0.6f,     -72.9f, -73.3f, -16.7f,    64.4f, 61.5f, 27.2f,   -0.2f, 21.3f },
-            new float[9] { 0.6f,     49.9f, -62.9f, -15.9f,     -52.7f, 58.5f, 15.8f,   -0.2f, -0.9f },
-            new float[9] { 0.6f,     -72.9f, -73.3f, -16.7f,     64.4f, 61.5f, 27.2f,   -0.2f, 21.3f },
-            new float[9] { 0.6f,     49.9f, -62.9f, -15.9f,     -52.7f, 58.5f, 15.8f,   -0.2f, -0.9f },
+            new float[9] { 0.6f,     -70f, -60f, -25f,    70f, 60f, 25f,   0f, 18f },
+            new float[9] { 0.6f,     50f, -35f, -15f,     -50f, 35f, 15f,   0f, 0f },
+            new float[9] { 0.6f,     -70f, -60f, -25f,    70f, 60f, 25f,   0f, 18f },
+            new float[9] { 0.6f,     50f, -35f, -15f,     -50f, 35f, 15f,   0f, 0f },
+
         };
 
         float[][] hi_v2List = {
-            new float[9] { 0.6f,    -67.4f, -48.5f, -19.2f,     -51.6f, 51.6f, 34.7f,   -0.9f, 12.9f },
-            new float[9] { 0.6f,    -55.9f, -77f, -55.3f,       -55.1f, 55.2f, 32.5f,   1.3f, 0f },
-            new float[9] { 0.6f,    -67.4f, -48.5f, -19.2f,     -51.6f, 51.6f, 34.7f,   -0.9f, 12.9f },
-            new float[9] { 0.6f,    -55.9f, -77f, -55.3f,       -55.1f, 55.2f, 32.5f,   1.3f, 0f },
+            new float[9] { 0.6f,    -70f, -48.5f, -19.2f,     -50f, 35f, 32f,   0f, 13f },
+            new float[9] { 0.6f,    -55f, -60f, -43f,       -50f, 37f, 27f,   0f, 0f },
+            new float[9] { 0.6f,    -70f, -48.5f, -19.2f,     -50f, 35f, 32f,   0f, 13f },
+            new float[9] { 0.6f,    -55f, -60f, -43f,       -50f, 37f, 27f,   0f, 0f },
         };
 
         float[][] handShakingList = {
-            new float[9] { 0.6f,    58.2f, -57.3f, -3.4f,    14.2f, 73.4f, 20.7f,    -0.8f, 12.1f },
-            new float[9] { 0.6f,    58.2f, -57.3f, -3.4f,    -15.6f, 75f, 24.7f,     -2.4f, 3.4f },
-            new float[9] { 0.6f,    58.2f, -57.3f, -3.4f,    14.2f, 73.4f, 20.7f,    -0.8f, 12.1f },
-            new float[9] { 0.6f,    58.2f, -57.3f, -3.4f,    -15.6f, 75f, 24.7f,     -2.4f, 3.4f },
+            new float[9] { 0.6f,    58f, -40f, -3f,    15f, 65f, 20.7f,    0f, 12f },
+            new float[9] { 0.6f,    58f, -40f, -3f,    -16f, 65f, 24.7f,     -3f, 4f },
+            new float[9] { 0.6f,    58f, -40f, -3f,    15f, 65f, 20.7f,    0f, 12f },
+            new float[9] { 0.6f,    58f, -40f, -3f,    -16f, 65f, 24.7f,     -3f, 4f },
         };
 
         float[][] excitingList = {
             new float[9] { 0.6f,    -47.6f, -38.1f, -90f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
-            new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 88.1f,    12.8f, 4f },
+            new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 65f,    12.8f, 4f },
             new float[9] { 0.6f,    -47.6f, -38.1f, -90f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
-            new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 88.1f,    12.8f, 4f },
+            new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 65f,    12.8f, 4f },
         };
 
         float[][] banggaBanggaList = {
-            new float[9] { 0.6f,    -51.4f, -55.7f, -3.4f,  49.7f, 49.7f, 23.4f,    -3.1f, 4.9f },
-            new float[9] { 0.6f,    -45.3f, -69f, -54.7f,   49.4f, 67f, 59.3f,      -1f, 1.8f },
-            new float[9] { 0.6f,    -51.4f, -55.7f, -3.4f,  49.7f, 49.7f, 23.4f,    -3.1f, 4.9f },
-            new float[9] { 0.6f,    -45.3f, -69f, -54.7f,   49.4f, 67f, 59.3f,      -1f, 1.8f },
-
+            new float[9] { 0.6f,    -50f, -56f, -4f,  49.7f, 49.7f, 23.4f,    -4f, 5f },
+            new float[9] { 0.6f,    -45f, -69f, -45f,   45f, 67f, 45f,      -1f, 2f },
+            new float[9] { 0.6f,    -50f, -56f, -4f,  49.7f, 49.7f, 23.4f,    -4f, 5f },
+            new float[9] { 0.6f,    -45f, -69f, -45f,   45f, 67f, 45f,      -1f, 2f },
         };
 
         float[][] sleepy_v2List = {
@@ -579,31 +580,31 @@ namespace REEL.PoseAnimation
         float[][] armsForwardBackList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f    },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   20f, 75f, 55f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   20f, 75f, 55f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   20f, 75f, 55f,     0f, 25f   },
 
         };
         float[][] armsForwardBackRightList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f    },
-            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 75f, 55f,     0f, 25f   },
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 75f, 55f,     0f, 25f   },
             new float[9] {  0.4f,       45f, -45f, -45f,   20f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 85f, 75f,     0f, 25f   },
+            new float[9] {  0.4f,       45f, -45f, -45f,   20f, 75f, 55f,     0f, 25f   },
 
         };
         float[][] armsForwardBackLeftList = new float[6][] {
                      // Time,   Left Arm,          Right Arm,         Head
             new float[9] {  0.9f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f    },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   -45f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   -45f, 45f, 45f,     0f, 25f   },
             new float[9] {  0.4f,       -20f, -45f, -45f,   -45f, 45f, 45f,     0f, 25f   },
-            new float[9] {  0.4f,       -20f, -85f, -75f,   -45f, 45f, 45f,     0f, 25f   },
+            new float[9] {  0.4f,       -20f, -75f, -55f,   -45f, 45f, 45f,     0f, 25f   },
 
         };
 
@@ -826,7 +827,23 @@ namespace REEL.PoseAnimation
             // if (isBreathActive) PlayMotion("breathing_active");
         }
 
-
+        public void ClickedNextButton()
+        {
+            string keys = keyInput.text;
+            float[][] motion = motionTable[keys];
+            int Length = motion.Length;
+            Debug.Log("길이 : " + Length);
+            
+            for (int i = 0; i < 8; i++)
+                SetAngle(i, motion[cnt][i+1]*1.2f);
+            cnt++;
+            if (cnt > Length-1)
+            {
+                keyInput.text = null;
+                cnt = 0;
+                Debug.Log("#########끝#######");
+            }
+        }
 
         public void SetBreathActiveState(string message)
         {
@@ -1113,6 +1130,8 @@ namespace REEL.PoseAnimation
                 if (ix == 0 && motionInfo.Length != 1 && MotionCoaching.repeat == false)
                 {
                     float maxDegree = GetDurationToFirstAngle(motionInfo[0]);
+                    if (maxDegree < 90f)
+                        maxDegree += 300f;
                     rotDuration = maxDegree / (rotSpeed * rotSpeedPercentage);
                     //Debug.Log("Max Degree: " + maxDegree + " , Rot Duration: " + rotDuration);
                 }

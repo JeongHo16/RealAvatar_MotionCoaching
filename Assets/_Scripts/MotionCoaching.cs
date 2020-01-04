@@ -95,6 +95,7 @@ public class MotionCoaching : MonoBehaviour
             }
             else if (keys.Contains("DEG"))
             {
+                facesave = 0;
                 degBase = true;
                 string degree = splitOutput[splitOutput.Length - 1][1];
                 string parts = splitOutput[0][0];
@@ -475,7 +476,7 @@ public class MotionCoaching : MonoBehaviour
             {
                 if(parts[j-1] == 1)
                 {
-                    motionDataFile[i][j] = motionDataFile[i][j] * 1.3f;
+                    motionDataFile[i][j] = motionDataFile[i][j] * 1.2f;
                     limitMinMax(i, j);
                 }
                 
