@@ -392,10 +392,10 @@ namespace REEL.PoseAnimation
         };
         float[][] armsSwingList = {
                             // Time,    Left Arm,           Right Arm,          Head
-            new float[9] {  1.0f,       0, -88.2f, -27.9f,        0, 46.8f, 14.4f,          0, 9},
-            new float[9] {  1.0f,        0, -46.8f, -14.4f,          0, 88.2f, 27.9f,         0, 9},
-            new float[9] {  1.0f,       0, -88.2f, -27.9f,         0, 46.8f, 14.4f,           0, 9},
-            new float[9] {  1.0f,        0, -46.8f, -14.4f,          0, 88.2f, 27.9f,         0, 9},
+            new float[9] {  1.0f,        0, -79.1f, -37.38f,        0, 46.8f, 14.4f,          0, 9},
+            new float[9] {  1.0f,        0, -46.8f, -14.4f,         0, 79.1f, 37.38f,       0, 9},
+            new float[9] {  1.0f,        0, -79.1f, -37.38f,        0, 46.8f, 14.4f,           0, 9},
+            new float[9] {  1.0f,        0, -46.8f, -14.4f,         0, 79.1f, 37.38f,       0, 9},
 
         };
         float[][] armsSwingRightList = {
@@ -546,12 +546,11 @@ namespace REEL.PoseAnimation
         };
 
         float[][] politeGreetingList = {
-            new float[9] { 0.7f,    32.22f, -40.16f, -77.1f,    -32.22f, 40.76f, 77.1f,     -1.71f, 4.23f },
-            new float[9] { 0.9f,    32.24f, -42.81f, -77.1f,    -32.24f, 42.64f, 77.1f,     -1.53f, -13.5f },
-            new float[9] { 0.7f,    32.22f, -40.16f, -77.1f,    -32.22f, 40.76f, 77.1f,     -1.71f, 4.23f },
-            new float[9] { 1.0f,    32.2f, -42.5f,   -77.1f,    -32.5f,   42.5f,   77.1f,     0f,    0f},
+            new float[9] { 0.7f,    39.6f, -38.16f, -80.1f,    -32.22f, 41.76f, 80.1f,     -1.71f, 4.23f },
+            new float[9] { 0.9f,    39.6f, -45.81f, -80.1f,    -30.24f, 53.64f, 80.1f,     -1.53f, -13.5f },
+            new float[9] { 0.7f,    39.6f, -38.16f, -80.1f,    -32.22f, 41.76f, 80.1f,     -1.71f, 4.23f },
+            new float[9] { 1.0f,    39.6f, -40.5f,   -80.1f,    -40.5f,   40.5f,   80.1f,     0f,    0f},
         };
-
 
         float[][] ok_v2List = {
             new float[9] { 0.6f,    40.6f, -55.5f, -20.8f,  -40f, 58.3f, 14.7f,     -3.5f, 24.5f },
