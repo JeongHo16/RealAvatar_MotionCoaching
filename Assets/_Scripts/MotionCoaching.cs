@@ -77,9 +77,8 @@ public class MotionCoaching : MonoBehaviour
         else
         {
             splitOutput = SplitKeys(keys);
-            if (keys.Contains("DYN"))
+            if (keys.Contains("DYN") && splitOutput[0].Length == 3)
             {
-
                 if (splitOutput[0][2] == "머리")
                     tempDataFile[0] = MovingNeck();
                 else
@@ -91,6 +90,7 @@ public class MotionCoaching : MonoBehaviour
                 motionDataFile = tempDataFile;
                 for (int i = 2; i < motionDataFile[0].Length; i++)
                     motionDataFile[0][i] *= -1f;
+
 
             }
             else if (keys.Contains("DEG"))

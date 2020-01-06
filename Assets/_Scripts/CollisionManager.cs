@@ -46,22 +46,16 @@ public class CollisionManager : MonoBehaviour
 
     private void UpdatePartsCollision() //부품의 충돌 여부를 갱신
     {
-        Debug.Log("====neck====");
         for (int i = 0; i < neck.Length; i++)
         {
             neckCollision[i] = neck[i].GetComponent<MOCCAPart>().collision;
-            Debug.Log(i + "    " + neckCollision[i]);
 
         }
         
         for (int i = 0; i < rightArmCollision.Length; i++)
         {
-            Debug.Log("===rightarm====");
             rightArmCollision[i] = rightArm[i].GetComponent<MOCCAPart>().collision;
-            Debug.Log("(right)    "+i+ "    "+rightArmCollision[i]);
-            Debug.Log("===leftarm====");
             leftArmCollision[i] = leftArm[i].GetComponent<MOCCAPart>().collision;
-            Debug.Log("(left)    " + i + "    " + leftArmCollision[i]);
 
         }
     }

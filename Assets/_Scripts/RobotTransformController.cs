@@ -12,7 +12,6 @@ namespace REEL.PoseAnimation
         public MoccaFaceAnniTest face;
         public JointSet[] jointInfo;
         public bool breath = false;
-        public InputField keyInput;
         public int cnt = 0;
         public string currentGesture;
 
@@ -511,9 +510,9 @@ namespace REEL.PoseAnimation
         };
 
         float[][] excitingList = {
-            new float[9] { 0.6f,    -47.6f, -38.1f, -90f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
+            new float[9] { 0.6f,    -47.6f, -38.1f, -85f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
             new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 65f,    12.8f, 4f },
-            new float[9] { 0.6f,    -47.6f, -38.1f, -90f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
+            new float[9] { 0.6f,    -47.6f, -38.1f, -85f,   53.1f, 7.6f, 12.5f,     -11.3f, 6.3f },
             new float[9] { 0.6f,    -29.8f, -38.1f, 0f,     64.7f, 36.7f, 65f,    12.8f, 4f },
         };
 
@@ -532,10 +531,10 @@ namespace REEL.PoseAnimation
         };
 
         float[][] sad_v2List = {
-            new float[9] { 0.5f,    -44f, -70f, -55f,     45f, 70f, 55f,   0.45f, -11.61f },
-            new float[9] { 0.5f,    -45f, -75f, -40f,   45f, 75f, 40f,      -0.45f, 16.47f },
-            new float[9] { 0.5f,    -44f, -70f, -55f,     45f, 70f, 55f,   0.45f, -11.61f },
-            new float[9] { 0.5f,    -45f, -75f, -40f,   45f, 75f, 40f,      -0.45f, 16.47f },
+            new float[9] { 0.5f,    -40f, -70f, -55f,     40f, 70f, 55f,   0f, -3f },
+            new float[9] { 0.5f,    -40f, -70f, -65f,   40f, 70f, 65f,      0f, -13f },
+            new float[9] { 0.5f,    -40f, -70f, -55f,     40f, 70f, 55f,   0f, -3f },
+            new float[9] { 0.5f,    -40f, -70f, -65f,   40f, 70f, 65f,      0f, -13f },
         };
 
         float[][] rightPointList = {
@@ -829,23 +828,23 @@ namespace REEL.PoseAnimation
             // if (isBreathActive) PlayMotion("breathing_active");
         }
 
-        public void ClickedNextButton()
-        {
-            string keys = keyInput.text;
-            float[][] motion = motionTable[keys];
-            int Length = motion.Length;
-            Debug.Log("길이 : " + Length);
+        //public void ClickedNextButton()
+        //{
+        //    string keys = keyInput.text;
+        //    float[][] motion = motionTable[keys];
+        //    int Length = motion.Length;
+        //    Debug.Log("길이 : " + Length);
             
-            for (int i = 0; i < 8; i++)
-                SetAngle(i, motion[cnt][i+1]*1.2f);
-            cnt++;
-            if (cnt > Length-1)
-            {
-                keyInput.text = null;
-                cnt = 0;
-                Debug.Log("#########끝#######");
-            }
-        }
+        //    for (int i = 0; i < 8; i++)
+        //        SetAngle(i, motion[cnt][i+1]*1.2f);
+        //    cnt++;
+        //    if (cnt > Length-1)
+        //    {
+        //        keyInput.text = null;
+        //        cnt = 0;
+        //        Debug.Log("#########끝#######");
+        //    }
+        //}
 
         public void SetBreathActiveState(string message)
         {
