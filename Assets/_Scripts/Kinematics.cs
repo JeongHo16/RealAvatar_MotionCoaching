@@ -91,7 +91,8 @@ public class Kinematics : MonoBehaviour
 
     public void CalculateInverse(float end_x, float end_y, float end_z, bool right)
     {
-        LimitStretchPose();
+        if(direction != "후")
+            LimitStretchPose();
         if (StateUpdater.isCanInverse)
         {
             int sign;
@@ -107,9 +108,13 @@ public class Kinematics : MonoBehaviour
                 end_y -= 0.1f;
             else if (direction == "좌")
                 end_x -= 0.1f;
-            else
+            else if (direction == "우")
                 end_x += 0.1f;
-
+            else if (direction == "전")
+                end_z += 0.1f;
+            else
+                end_x -= 0.1f;
+            
             float temp = end_x;
             end_x = end_y;
             end_y = end_z;
@@ -172,14 +177,16 @@ public class Kinematics : MonoBehaviour
                 {
                     
                     if (float.IsNaN(afterAngles[i]))
-                        afterAngles[i] = 0;
+                    {
+                        afterAngles[i] = 0f;
+                    }
+                        
                 }
 
 
                 limitAngle(ref afterAngles, 1);
                 limitAngle(ref afterAngles, 4);
                 LimitInverseAngle();
-
                 
                 LimitStretchPose();
 
@@ -272,7 +279,7 @@ public class Kinematics : MonoBehaviour
                 val0 = afterAngles[4];
                 val1 = afterAngles[5];
                 val2 = afterAngles[6];
- 
+                Debug.Log("각도 값 : " + val0 + ",     " + val1 + ",     " + val2);
 
             }
 
@@ -283,7 +290,7 @@ public class Kinematics : MonoBehaviour
                 val2 = afterAngles[3];
             }
 
-            if (((Mathf.Abs(val0) < 5.0f && Mathf.Abs(val1) < 5.0f) || (Mathf.Abs(val1) < 5.0f && Mathf.Abs(val2) < 5.0f)))
+            if (((Mathf.Abs(val0) < 5.0f && Mathf.Abs(val1) < 5.0f) || (Mathf.Abs(val1) < 5.0f && Mathf.Abs(val2) < 5.0f) || (Mathf.Abs(val0) < 5.0f && Mathf.Abs(val2) < 5.0f)))
             {
                 StateUpdater.isCanInverse = false;
             }

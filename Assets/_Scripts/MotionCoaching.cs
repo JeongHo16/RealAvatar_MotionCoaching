@@ -636,6 +636,9 @@ public class MotionCoaching : MonoBehaviour
             case "우":
                 temp[7] += 20f; ;
                 break;
+            default:
+                canMove = false;
+                break;
         }
 
         CheckNeckAngle(ref temp[7], 6);
