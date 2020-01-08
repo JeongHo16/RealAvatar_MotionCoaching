@@ -32,6 +32,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
 
     void StartRecord()
     {
+        Speechinput.text = null;
         Debug.Log("[SpeechRec] StartRecord");
         _result = "";
         _speechRecognition.StartRecord(false);
@@ -127,7 +128,7 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
 
         if (StateUpdater.isInputEntered)
         {
-            
+            Speechinput.text = null;
             YesNoClient.Instance.Open();
             AI_MESSAGE request = new AI_MESSAGE();
             request.method = "movements";

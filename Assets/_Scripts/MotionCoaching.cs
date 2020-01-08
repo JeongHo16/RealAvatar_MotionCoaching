@@ -45,6 +45,7 @@ public class MotionCoaching : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(StateUpdater.isCanDoGesture);
         if (SpeechRecognition.receive == true)
         {
             if (StateUpdater.isCanDoGesture)
@@ -78,6 +79,7 @@ public class MotionCoaching : MonoBehaviour
         if (keys == "NOT_FOUND")
         {
             popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+            StateUpdater.isCanDoGesture = true;
         }
 
         else
@@ -189,7 +191,9 @@ public class MotionCoaching : MonoBehaviour
                 switch (splitOutput[0][0])
                 {
                     case "몸몸통바퀴":
+                        Debug.Log("수행");
                         popUpMessege.MessegePopUp("일치하는 동작이 없어요");
+                        StateUpdater.isCanDoGesture = true;
                         break;
 
                     case "얼굴표정":
@@ -299,13 +303,21 @@ public class MotionCoaching : MonoBehaviour
             }
             else
             {
-                switchFaceAni(facesave);
-                if (!onlyFace)
+                if (motionDataFile == null)
                 {
-                    coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+                    popUpMessege.MessegePopUp("동작을 실행할 수 없어요");
                 }
-                onlyFace = false;
-
+                else
+                {
+                    switchFaceAni(facesave);
+                    if (!onlyFace)
+                    {
+                        coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+                    }
+                    onlyFace = false;
+                }
+                
+                
             }
         }
 
