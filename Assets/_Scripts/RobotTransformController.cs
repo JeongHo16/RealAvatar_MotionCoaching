@@ -803,7 +803,7 @@ namespace REEL.PoseAnimation
 
         public Dictionary<string, float[][]> motionTable;
         IEnumerator currentAnimation = null;
-        private bool isPlaying = false;
+        public static bool isPlaying = false;
         private bool isBreathActive = true;
 
         private readonly float playMotionDelayTime = 1f;
@@ -827,14 +827,14 @@ namespace REEL.PoseAnimation
 
             // if (isBreathActive) PlayMotion("breathing_active");
         }
-
+        
         //public void ClickedNextButton()
         //{
         //    string keys = keyInput.text;
         //    float[][] motion = motionTable[keys];
         //    int Length = motion.Length;
         //    Debug.Log("길이 : " + Length);
-            
+
         //    for (int i = 0; i < 8; i++)
         //        SetAngle(i, motion[cnt][i+1]*1.2f);
         //    cnt++;
@@ -1168,7 +1168,6 @@ namespace REEL.PoseAnimation
             // yield return StartCoroutine(SetBasePos());
 
             isPlaying = false;
-
             //Debug.Log("Motion Finished, queue count: " + animationQueue.Count);
             if (animationQueue.Count > 0)
             {

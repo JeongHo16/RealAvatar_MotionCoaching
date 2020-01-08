@@ -110,6 +110,16 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
                 AI_MESSAGE response = JsonUtility.FromJson<AI_MESSAGE>(coaching_result);
                 output = response;
                 Debug.Log("[Coaching] Result: " + response.result);
+                if (REEL.PoseAnimation.RobotTransformController.isPlaying)
+                {
+                    if (output.result.Contains("전신-정지"))
+                        StateUpdater.isCanDoGesture = true;
+                    else
+                        StateUpdater.isCanDoGesture = false;
+                }
+                    
+                else
+                    StateUpdater.isCanDoGesture = true;
                 
             }
             

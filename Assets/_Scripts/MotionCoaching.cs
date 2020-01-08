@@ -47,8 +47,14 @@ public class MotionCoaching : MonoBehaviour
     {
         if (SpeechRecognition.receive == true)
         {
-            MakeUpMotionDataFile();
-
+            if (StateUpdater.isCanDoGesture)
+                MakeUpMotionDataFile();
+            else
+            {
+                SpeechRecognition.receive = false;
+                popUpMessege.MessegePopUp("동작이 끝난 후 다시 명령해주세요.");
+            }
+                
         }
         if (StateUpdater.isSpeakingAgain)
         {
@@ -428,14 +434,14 @@ public class MotionCoaching : MonoBehaviour
             switchFaceAni(facesave);
             StopCoroutine(coroutine);
             face.Clear();
+            StateUpdater.isCanDoGesture = true;
+            REEL.PoseAnimation.RobotTransformController.isPlaying = false;
         }
 
         else
         {
             //motionDataFile = robot.keyMotionTable(key);
             motionDataFile = CopyFloatArray(sendKey);
-            Debug.Log(motionDataFile.Length);
-            Debug.Log(sendKey);
         }
 
     }
@@ -701,6 +707,7 @@ public class MotionCoaching : MonoBehaviour
 
     IEnumerator CountTime(float time)
     {
+        REEL.PoseAnimation.RobotTransformController.isPlaying = true;
         float elapsedTime = 0.0f;
         while (elapsedTime < time)
         {
@@ -716,7 +723,8 @@ public class MotionCoaching : MonoBehaviour
         }
         face.Clear();
         StartCoroutine(robot.SetBasePos());
-
+        REEL.PoseAnimation.RobotTransformController.isPlaying = false;
+        StateUpdater.isCanDoGesture = true;
     }
 
     void GetDurTime()

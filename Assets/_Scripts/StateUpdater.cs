@@ -11,4 +11,5 @@
     public static bool isSpeakingAgain = false;
     public static bool isInputEntered = false;
     public static bool isLongMDFinDUR = false;
+    public static bool isCanDoGesture = false;
 }
