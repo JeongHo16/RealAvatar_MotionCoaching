@@ -113,8 +113,8 @@ public class Kinematics : MonoBehaviour
             else if (direction == "전")
                 end_z += 0.1f;
             else
-                end_x -= 0.1f;
-            
+                end_z -= 0.1f;
+
             float temp = end_x;
             end_x = end_y;
             end_y = end_z;
@@ -155,7 +155,7 @@ public class Kinematics : MonoBehaviour
 
             if (cos_th_1 == 0 || cos_th_2 == 0 || cos_th_3 == 0)
                 StateUpdater.isCanInverse = false;
-         
+
             if (StateUpdater.isCanInverse)
             {
                 if (!right)
@@ -169,25 +169,23 @@ public class Kinematics : MonoBehaviour
                     afterAngles[4] = Mathf.Atan2(sin_th_1, cos_th_1) * Mathf.Rad2Deg;
                     afterAngles[5] = Mathf.Atan2(sin_th_2, cos_th_2) * Mathf.Rad2Deg;
                     afterAngles[6] = Mathf.Atan2(sin_th_3, cos_th_3) * Mathf.Rad2Deg;
-                    
+
                 }
 
-                
+
                 for (int i = 1; i < afterAngles.Length; i++)
                 {
-                    
+
                     if (float.IsNaN(afterAngles[i]))
-                    {
-                        afterAngles[i] = 0f;
-                    }
-                        
+                        afterAngles[i] = 0;
                 }
 
 
                 limitAngle(ref afterAngles, 1);
                 limitAngle(ref afterAngles, 4);
                 LimitInverseAngle();
-                
+
+
                 LimitStretchPose();
 
                 //if (StateUpdater.isCanInverse)
@@ -221,7 +219,7 @@ public class Kinematics : MonoBehaviour
 
     //    }
     //}
-        public void limitAngle(ref float[] new_angles, int index)
+    public void limitAngle(ref float[] new_angles, int index)
     {
         if (new_angles[index] > 90f)
             new_angles[index] -= 180f;
