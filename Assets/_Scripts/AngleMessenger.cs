@@ -48,6 +48,7 @@ public class AngleMessenger : MonoBehaviour
             {
                 StartCoroutine(robot.SetBasePos());
                 MotionCoaching.degBase = false;
+                
             }
 
         }

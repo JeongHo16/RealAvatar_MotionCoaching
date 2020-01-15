@@ -928,7 +928,8 @@ namespace REEL.PoseAnimation
             }
 
             yield return new WaitForSeconds(basePoseTime);
-
+            StateUpdater.isCanDoGesture = true;
+            isPlaying = false;
             if (StateUpdater.isCallingADV)
                 StateUpdater.isCallingADV = false;
         }
@@ -967,68 +968,68 @@ namespace REEL.PoseAnimation
         {
             motionTable = new Dictionary<string, float[][]>();
             //motionTable.Add("hi", hiList);  // 삭제.
-            motionTable.Add("hello", helloList);
-            motionTable.Add("angry", angryList);
-            motionTable.Add("sad", sadList);
+            //motionTable.Add("hello", helloList);
+            //motionTable.Add("angry", angryList);
+            //motionTable.Add("sad", sadList);
             motionTable.Add("머리고개얼굴목-상하반복", okList);
             motionTable.Add("팔양팔두팔양쪽팔-전후반복", armsForwardBackList);
             motionTable.Add("오른팔-전후반복", armsForwardBackRightList);
             motionTable.Add("왼팔-전후반복", armsForwardBackLeftList);
 
             motionTable.Add("머리고개얼굴목-좌우반복", noList);
-            motionTable.Add("wrong", wrongList);
-            motionTable.Add("happy", happyList);
-            motionTable.Add("nod", nodList);
-            motionTable.Add("nodRight", nodRightList);
-            motionTable.Add("nodLeft", nodLeftList);
-            motionTable.Add("breathing_active", breathing_active);
-            motionTable.Add("breathing_inactive", breathing_inactive);
-            motionTable.Add("refuse", refuseList);
-            motionTable.Add("smile", smileList);
-            motionTable.Add("takenaback", takenabackList);
-            motionTable.Add("tell", tellList);
-            motionTable.Add("sleep", sleepyList);
-            motionTable.Add("thinking", thinkingList);
+            //motionTable.Add("wrong", wrongList);
+            //motionTable.Add("happy", happyList);
+            //motionTable.Add("nod", nodList);
+            //motionTable.Add("nodRight", nodRightList);
+            //motionTable.Add("nodLeft", nodLeftList);
+            //motionTable.Add("breathing_active", breathing_active);
+            //motionTable.Add("breathing_inactive", breathing_inactive);
+            //motionTable.Add("refuse", refuseList);
+            //motionTable.Add("smile", smileList);
+            //motionTable.Add("takenaback", takenabackList);
+            //motionTable.Add("tell", tellList);
+            //motionTable.Add("sleep", sleepyList);
+            //motionTable.Add("thinking", thinkingList);
             motionTable.Add("전신-(규모 등에)놀람", excellentList);  // 박수.
-            motionTable.Add("stretch", stretchList);
+            //motionTable.Add("stretch", stretchList);
             motionTable.Add("전신-허그", hugList);
             //motionTable.Add("fear", fearList);  // 새로 만들기.
-            motionTable.Add("bow", bowList);
-            motionTable.Add("attention", attentionList);
-            motionTable.Add("best", bestList);
-            motionTable.Add("leftNeck", leftNeckList);
-            motionTable.Add("rightNeck", rightNeckList);
+            //motionTable.Add("bow", bowList);
+            //motionTable.Add("attention", attentionList);
+            //motionTable.Add("best", bestList);
+            //motionTable.Add("leftNeck", leftNeckList);
+            //motionTable.Add("rightNeck", rightNeckList);
             motionTable.Add("머리고개얼굴목-전", forwardList);
             //motionTable.Add("coach", coachList);  // 삭제.
             //motionTable.Add("require", requireList);  // 삭제.
             //motionTable.Add("reset", resetList);  // 삭제.
             //motionTable.Add("exchanged", exchangedList);  // 삭제.
-            motionTable.Add("shake", shakeList);
+            //motionTable.Add("shake", shakeList);
 
             motionTable.Add("전신-만세", hurrayList);
-            motionTable.Add("hi_v2", hi_v2List);
+            //motionTable.Add("hi_v2", hi_v2List);
             motionTable.Add("전신-악수", handShakingList);
             motionTable.Add("전신-기쁨", excitingList);
             motionTable.Add("전신-팔로인사", banggaBanggaList);
             motionTable.Add("전신-졸림", sleepy_v2List);
             motionTable.Add("전신-슬픔", sad_v2List);
-            motionTable.Add("right_point", rightPointList);
+            //motionTable.Add("right_point", rightPointList);
             motionTable.Add("전신-고개숙여인사", politeGreetingList);
             motionTable.Add("전신-긍정", ok_v2List);
             motionTable.Add("전신-부정", no_v2List);
-            motionTable.Add("left_point", leftPointList);
+            //motionTable.Add("left_point", leftPointList);
             motionTable.Add("전신-(소리 등에)놀람", surprisedList);
             motionTable.Add("전신-집중", attention_v2List);
             motionTable.Add("전신-칭찬", complimentList);
 
-            motionTable.Add("headTilt", headTiltList);
+            //motionTable.Add("headTilt", headTiltList);
             motionTable.Add("머리고개얼굴목-상-후", headBackList);
             motionTable.Add("머리고개얼굴목-상-전", headUpList);
             motionTable.Add("머리고개얼굴목-우", headRightList);
             motionTable.Add("머리고개얼굴목-좌", headLeftList);
             motionTable.Add("전신-회피", headLeftList);
             motionTable.Add("머리고개얼굴목-하", headDownList);
-            motionTable.Add("head", headList);
+            //motionTable.Add("head", headList);
 
             motionTable.Add("팔양팔두팔양쪽팔-상", armsUpList);
             motionTable.Add("오른팔-상", armsUpRightList);
@@ -1042,15 +1043,15 @@ namespace REEL.PoseAnimation
             motionTable.Add("팔양팔두팔양쪽팔-안(몸)쪽", armsInList);
             motionTable.Add("오른팔-안(몸)쪽", armsInRightList);
             motionTable.Add("왼팔-안(몸)쪽", armsInLeftList);
-            motionTable.Add("spreadout", spreadoutList);
-            motionTable.Add("spreadoutRight", spreadoutRightList);
-            motionTable.Add("spreadoutLeft", spreadoutLeftList);
+            //motionTable.Add("spreadout", spreadoutList);
+            //motionTable.Add("spreadoutRight", spreadoutRightList);
+            //motionTable.Add("spreadoutLeft", spreadoutLeftList);
             motionTable.Add("팔양팔두팔양쪽팔-전", armsForwardList);
             motionTable.Add("오른팔-전", armsForwardRightList);
             motionTable.Add("왼팔-전", armsForwardLeftList);
-            motionTable.Add("armsFront", armsFrontList);
-            motionTable.Add("armsFrontRight", armsFrontRightList);
-            motionTable.Add("armsFrontLeft", armsFrontLeftList);
+            //motionTable.Add("armsFront", armsFrontList);
+            //motionTable.Add("armsFrontRight", armsFrontRightList);
+            //motionTable.Add("armsFrontLeft", armsFrontLeftList);
             motionTable.Add("팔양팔두팔양쪽팔-좌우반복", armsSwingList);
             motionTable.Add("팔양팔두팔양쪽팔-좌우대칭", armsMirrorList);
             motionTable.Add("오른팔-좌우반복", armsSwingRightList);
@@ -1166,7 +1167,6 @@ namespace REEL.PoseAnimation
             }
 
             // yield return StartCoroutine(SetBasePos());
-
             isPlaying = false;
             //Debug.Log("Motion Finished, queue count: " + animationQueue.Count);
             if (animationQueue.Count > 0)

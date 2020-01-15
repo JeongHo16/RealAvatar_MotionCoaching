@@ -118,12 +118,12 @@ public class SpeechRecognition : Singleton<SpeechRecognition>
                     else
                         StateUpdater.isCanDoGesture = false;
                 }
-                    
+
                 else
                     StateUpdater.isCanDoGesture = true;
-                
+
             }
-            
+
         }
 
         if (StateUpdater.isInputEntered)

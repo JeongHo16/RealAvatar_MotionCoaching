@@ -174,7 +174,7 @@ public class MotionCoaching : MonoBehaviour
                 else if (parts == "얼굴표정")
                     parts = "머리고개얼굴목";
                 string ctrldeg = parts + "-DEG-" + degree;
-                if(!degree.Equals("x"))
+                if (!degree.Equals("x"))
                     motionDataFile = CopyFloatArray(ctrldeg);
             }
             else
@@ -191,7 +191,7 @@ public class MotionCoaching : MonoBehaviour
                 switch (splitOutput[0][0])
                 {
                     case "몸몸통바퀴":
-                        Debug.Log("수행");
+                        isStop = true;
                         popUpMessege.MessegePopUp("일치하는 동작이 없어요");
                         StateUpdater.isCanDoGesture = true;
                         break;
@@ -222,120 +222,121 @@ public class MotionCoaching : MonoBehaviour
                         break;
                 }
             }
-        }
-        if (!isStop)
-        {
-            if (keys.Contains("ADV"))
+
+
+            if (!isStop)
             {
-                StateUpdater.isCallingADV = true;
-                int index = 0;
-                for (int i = 0; i < splitOutput[i].Length; i++)
+                if (keys.Contains("ADV"))
                 {
-                    if (splitOutput[i][0].Equals("ADV"))
+                    StateUpdater.isCallingADV = true;
+                    int index = 0;
+                    for (int i = 0; i < splitOutput[i].Length; i++)
                     {
-                        index = i;
-                        break;
+                        if (splitOutput[i][0].Equals("ADV"))
+                        {
+                            index = i;
+                            break;
+                        }
                     }
+
+                    int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
+                    if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
+                    {
+                        if (whole == "왼팔")
+                        {
+                            for (int i = 0; i < 3; i++)
+                                parts[i] = 1;
+                        }
+                        else if (whole == "오른팔")
+                            for (int i = 3; i < 6; i++)
+                                parts[i] = 1;
+                        else if (whole == "머리고개얼굴목")
+                            for (int i = 6; i < 8; i++)
+                                parts[i] = 1;
+                        else if (whole == "팔양팔두팔양쪽팔")
+                            for (int i = 0; i < 6; i++)
+                                parts[i] = 1;
+                        else
+                        {
+                            for (int i = 0; i < 8; i++)
+                                parts[i] = 1;
+                        }
+                    }
+
+                    if (!((keys.Contains("DYN") || keys.Contains("DEG")) && (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")))
+                    {
+                        switch (splitOutput[index][1])
+                        {
+                            case "속도강":
+                                MotionSpeedUp();
+                                break;
+                            case "속도약":
+                                MotionSpeedDown();
+                                break;
+                            case "각도강":
+                                MotionExpansion(parts);
+                                break;
+                            case "각도약":
+                                MotionReduction(parts);
+                                break;
+                        }
+                    }
+
+
                 }
 
-                int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
-                if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
+                if (canADV && StateUpdater.isCanInverse && canMove)
                 {
-                    if (whole == "왼팔")
+                    if (keys.Contains("DUR"))
                     {
-                        for (int i = 0; i < 3; i++)
-                            parts[i] = 1;
+                        GetDurTime();
+                        if (time != 0f)
+                        {
+                            if (motionDataFile.Length == 1)
+                            {
+                                StartCoroutine("PlayAndWait");
+                            }
+                            else
+                            {
+                                coroutine = StartCoroutine(RepeatMotion());
+                                StartCoroutine(CountTime(time));
+                            }
+                        }
                     }
-                    else if (whole == "오른팔")
-                        for (int i = 3; i < 6; i++)
-                            parts[i] = 1;
-                    else if (whole == "머리고개얼굴목")
-                        for (int i = 6; i < 8; i++)
-                            parts[i] = 1;
-                    else if (whole == "팔양팔두팔양쪽팔")
-                        for (int i = 0; i < 6; i++)
-                            parts[i] = 1;
                     else
                     {
-                        for (int i = 0; i < 8; i++)
-                            parts[i] = 1;
-                    }
-                }
-
-                if (!((keys.Contains("DYN") || keys.Contains("DEG")) && (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")))
-                {
-                    switch (splitOutput[index][1])
-                    {
-                        case "속도강":
-                            MotionSpeedUp();
-                            break;
-                        case "속도약":
-                            MotionSpeedDown();
-                            break;
-                        case "각도강":
-                            MotionExpansion(parts);
-                            break;
-                        case "각도약":
-                            MotionReduction(parts);
-                            break;
-                    }
-                }
-
-
-            }
-
-            if (canADV && StateUpdater.isCanInverse && canMove)
-            {
-                if (keys.Contains("DUR"))
-                {
-                    GetDurTime();
-                    if (time != 0f)
-                    {
-                        if (motionDataFile.Length == 1)
+                        if (motionDataFile == null && !onlyFace)
                         {
-                            StartCoroutine("PlayAndWait");
+                            popUpMessege.MessegePopUp("동작을 실행할 수 없어요");
+                            StateUpdater.isCanDoGesture = true;
                         }
                         else
                         {
-                            coroutine = StartCoroutine(RepeatMotion());
-                            StartCoroutine(CountTime(time));
+                            switchFaceAni(facesave);
+                            if (!onlyFace)
+                            {
+                                coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
+                            }
+                            onlyFace = false;
                         }
+
+
                     }
                 }
+
                 else
                 {
-                    if (motionDataFile == null)
-                    {
-                        popUpMessege.MessegePopUp("동작을 실행할 수 없어요");
-                    }
-                    else
-                    {
-                        switchFaceAni(facesave);
-                        if (!onlyFace)
-                        {
-                            coroutine = StartCoroutine(robot.GestureProcess(motionDataFile));
-                        }
-                        onlyFace = false;
-                    }
-
+                    popUpMessege.MessegePopUp("더 이상 빨라질 수 없어요");
+                    canADV = true;
 
                 }
             }
-
             else
             {
-                popUpMessege.MessegePopUp("더 이상 빨라질 수 없어요");
-                canADV = true;
-
+                isStop = false;
             }
         }
-        else
-        {
-            isStop = false;
-        }
-
-
-
+        
 
 
     }
@@ -427,7 +428,7 @@ public class MotionCoaching : MonoBehaviour
             case "만세":
                 facesave = 5; break;
 
-            case "(규모 등에) 놀람":
+            case "(규모 등에)놀람":
             case "(소리 등에)놀람":
                 facesave = 6; break;
 
@@ -437,12 +438,15 @@ public class MotionCoaching : MonoBehaviour
             case "생각":
                 facesave = 10; break;
 
-            case "부끄러움":
+            
             case "졸림":
                 facesave = 11; break;
 
             case "회피":
                 facesave = 12; break;
+
+            case "부끄러움":
+                facesave = 13; break;
 
 
         }

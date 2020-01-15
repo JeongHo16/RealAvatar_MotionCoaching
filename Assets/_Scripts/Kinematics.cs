@@ -62,6 +62,7 @@ public class Kinematics : MonoBehaviour
 
     public float[] InverseKinematics(string part, string dir)
     {
+        Debug.Log(part);
         moccaPart = part;
         direction = dir;
         if (part == "왼팔")
@@ -91,7 +92,7 @@ public class Kinematics : MonoBehaviour
 
     public void CalculateInverse(float end_x, float end_y, float end_z, bool right)
     {
-        if(direction != "후")
+        if(direction != "후" && (direction == "상" || direction == "하"))
             LimitStretchPose();
         if (StateUpdater.isCanInverse)
         {
@@ -175,18 +176,21 @@ public class Kinematics : MonoBehaviour
 
                 for (int i = 1; i < afterAngles.Length; i++)
                 {
-
-                    if (float.IsNaN(afterAngles[i]))
-                        afterAngles[i] = 0;
+                    if ((float.IsNaN(afterAngles[1]) && float.IsNaN(afterAngles[2])) || (float.IsNaN(afterAngles[2]) && float.IsNaN(afterAngles[3])) || (float.IsNaN(afterAngles[1]) && float.IsNaN(afterAngles[3]))
+                        || (float.IsNaN(afterAngles[4]) && float.IsNaN(afterAngles[5])) || (float.IsNaN(afterAngles[5]) && float.IsNaN(afterAngles[6])) || (float.IsNaN(afterAngles[4]) && float.IsNaN(afterAngles[6])))
+                        StateUpdater.isCanInverse = false;
                 }
 
+                if(StateUpdater.isCanInverse)
+                {
+                    limitAngle(ref afterAngles, 1);
+                    limitAngle(ref afterAngles, 4);
+                    LimitInverseAngle();
+                }
+                
 
-                limitAngle(ref afterAngles, 1);
-                limitAngle(ref afterAngles, 4);
-                LimitInverseAngle();
 
-
-                LimitStretchPose();
+                //LimitStretchPose();
 
                 //if (StateUpdater.isCanInverse)
                 //{
@@ -196,7 +200,6 @@ public class Kinematics : MonoBehaviour
             }
         }
     }
-
     //IEnumerator MovingInverse(Transform transforms, int index)
     //{
     //    float elapsedTime = 0f;
@@ -270,14 +273,13 @@ public class Kinematics : MonoBehaviour
         float val1 = 0;
         float val2 = 0;
 
-        if (moccaPart != "팔양팔두팔양쪽팔")
+        if (moccaPart == "오른팔" || moccaPart == "왼팔")
         {
             if (moccaPart == "오른팔")
             {
                 val0 = afterAngles[4];
                 val1 = afterAngles[5];
                 val2 = afterAngles[6];
-                Debug.Log("각도 값 : " + val0 + ",     " + val1 + ",     " + val2);
 
             }
 
@@ -287,7 +289,6 @@ public class Kinematics : MonoBehaviour
                 val1 = afterAngles[2];
                 val2 = afterAngles[3];
             }
-
             if (((Mathf.Abs(val0) < 5.0f && Mathf.Abs(val1) < 5.0f) || (Mathf.Abs(val1) < 5.0f && Mathf.Abs(val2) < 5.0f) || (Mathf.Abs(val0) < 5.0f && Mathf.Abs(val2) < 5.0f)))
             {
                 StateUpdater.isCanInverse = false;
