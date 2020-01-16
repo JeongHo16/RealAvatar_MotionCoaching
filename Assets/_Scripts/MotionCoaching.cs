@@ -229,18 +229,25 @@ public class MotionCoaching : MonoBehaviour
                 if (keys.Contains("ADV"))
                 {
                     StateUpdater.isCallingADV = true;
-                    int index = 0;
-                    for (int i = 0; i < splitOutput[i].Length; i++)
+                    int speed = 0;
+                    int angle = 0;
+                    int power = 0;
+                    if (keys.Contains("속도"))
+                        speed = keys.Contains("속도강") ? 1 : -1;
+                    if (keys.Contains("각도"))
+                        angle = keys.Contains("각도강") ? 1 : -1;
+                    if (keys.Contains("강도"))
+                        power = keys.Contains("강도강") ? 1 : -1;
+
+                    if (speed == 0 && angle == 0 && power != 0)
                     {
-                        if (splitOutput[i][0].Equals("ADV"))
-                        {
-                            index = i;
-                            break;
-                        }
+                        speed = power;
+                        power = 0;
                     }
 
+
                     int[] parts = new int[8] { 0, 0, 0, 0, 0, 0, 0, 0 };
-                    if (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")
+                    if (angle != 0)
                     {
                         if (whole == "왼팔")
                         {
@@ -263,27 +270,22 @@ public class MotionCoaching : MonoBehaviour
                         }
                     }
 
-                    if (!((keys.Contains("DYN") || keys.Contains("DEG")) && (splitOutput[index][1] == "각도강" || splitOutput[index][1] == "각도약")))
+                    if (!((keys.Contains("DYN") || keys.Contains("DEG")) && (angle != 0)))
                     {
-                        switch (splitOutput[index][1])
-                        {
-                            case "속도강":
-                                MotionSpeedUp();
-                                break;
-                            case "속도약":
-                                MotionSpeedDown();
-                                break;
-                            case "각도강":
-                                MotionExpansion(parts);
-                                break;
-                            case "각도약":
-                                MotionReduction(parts);
-                                break;
-                        }
+                        if (speed == 1)
+                            MotionSpeedUp(power);
+                        else if (speed == -1)
+                            MotionSpeedDown(power);
+                        if (angle == 1)
+                            MotionExpansion(parts, power);
+                        else if (angle == -1)
+                            MotionReduction(parts, power);
+
                     }
 
 
                 }
+
 
                 if (canADV && StateUpdater.isCanInverse && canMove)
                 {
@@ -470,14 +472,20 @@ public class MotionCoaching : MonoBehaviour
 
     }
 
-    void MotionSpeedUp()
+    void MotionSpeedUp(int power)
     {
+        float divideNum = 2f;
+
+        if (power == 1)
+            divideNum = 2.4f;
+        else if (power == -1)
+            divideNum = 1.6f;
+
         for (int i = 0; i < motionDataFile.Length; i++)
         {
-            if (motionDataFile[i][0] / 2f >= 0.2f)
+            if (motionDataFile[i][0] / divideNum >= 0.2f)
             {
-                motionDataFile[i][0] /= 2f;
-                continue;
+                motionDataFile[i][0] /= divideNum;
             }
             else
             {
@@ -488,46 +496,65 @@ public class MotionCoaching : MonoBehaviour
 
     }
 
-    void MotionSpeedDown()
+    void MotionSpeedDown(int power)
     {
+        float divideNum = 2f;
+
+        if (power == 1)
+            divideNum = 2.4f;
+        else if (power == -1)
+            divideNum = 1.6f;
+
         for (int i = 0; i < motionDataFile.Length; i++)
         {
-            motionDataFile[i][0] *= 2f;
+            motionDataFile[i][0] *= divideNum;
         }
 
     }
 
-    void MotionExpansion(int[] parts)
+    void MotionExpansion(int[] parts, int power)
     {
+        float multipleNum = 1.2f;
+
+        if (power == 1)
+            multipleNum = 1.3f;
+        else if (power == -1)
+            multipleNum = 1.1f;
 
         for (int i = 0; i < motionDataFile.Length; i++)
         {
             for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                if(parts[j-1] == 1)
+                if (parts[j - 1] == 1)
                 {
-                    motionDataFile[i][j] = motionDataFile[i][j] * 1.2f;
+                    motionDataFile[i][j] = motionDataFile[i][j] * multipleNum;
                     limitMinMax(i, j);
                 }
-                
+
             }
 
         }
     }
 
-    void MotionReduction(int[] parts)
+    void MotionReduction(int[] parts, int power)
     {
+        float multipleNum = 0.7f;
+
+        if (power == 1)
+            multipleNum = 0.6f;
+        else if (power == -1)
+            multipleNum = 0.8f;
 
         for (int i = 0; i < motionDataFile.Length; i++)
         {
             for (int j = 1; j < motionDataFile[i].Length; j++)
             {
-                if(parts[j-1] ==1)
+                if (parts[j - 1] == 1)
                 {
-                    motionDataFile[i][j] = motionDataFile[i][j] * 0.7f;
+                    motionDataFile[i][j] = motionDataFile[i][j] * multipleNum;
                     limitMinMax(i, j);
                 }
-                
+
 
             }
 
